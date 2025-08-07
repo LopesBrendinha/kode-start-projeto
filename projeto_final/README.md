@@ -18,40 +18,78 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 ## 🧠 Decisões Técnicas e Justificativas
 
 ### 🌐 Arquitetura - MVC (Model-View-Controller)
-Optei por utilizar o padrão **MVC** pela sua clareza na separação de responsabilidades:
+Optei por utilizar o padrão **MVC** pela sua clareza na separação de responsabilidades e também foi o padrão que mais estudei:
 
-- **Model:** Responsável por representar os dados (ex: `CharacterModel`).
+- **Model:** Responsável por representar os dados (ex: 'detailed_character.dart').
 - **View:** Interface com o usuário, implementada com `Widgets` declarativos.
-- **Controller:** Lógica de negócio e mediação entre modelo e visualização.
+- **Controller:** Lógica de negócio e mediação entre model e view.
 
-Essa estrutura torna o código mais organizado, reutilizável e de fácil manutenção — facilitando testes, leitura e escalabilidade.
+Essa estrutura torna o código mais organizado, reutilizável e de fácil manutenção, assim facilitando testes, leitura e escalabilidade.
 
 ### 📡 Requisições HTTP
-Utilizei o pacote `http` para realizar chamadas REST à API do Rick and Morty, por ser leve, simples e suficiente para este desafio.
+Utilizei o pacote `http` para realizar chamadas REST à API do Rick and Morty, por ser leve, simples e foi o método que estudei na faculdade, assim estava mais familiarizado com ele.
 
 ### 🛠️ Gerenciamento de Estado
-O estado foi mantido simples (com `setState`) devido à natureza do desafio e foco em boas práticas fundamentais. Em projetos maiores, considero o uso de soluções como `Provider` ou `Riverpod`.
+O estado foi mantido simples (com `setState`) devido à natureza do desafio, que prioriza boas práticas fundamentais. Essa abordagem também foi utilizada no meu TCC, o que torna mais natural e eficiente para eu aplicá-la neste projeto.
 
 ### 📄 Organização do Projeto
 O projeto foi dividido em pastas conforme o padrão MVC:
 
-lib/
+projeto_final
 │
-├── models/
-│ └── character_model.dart
-├── controllers/
-│ └── character_controller.dart
-├── views/
-│ ├── home_page.dart
-│ └── character_detail_page.dart
-├── services/
-│ └── api_service.dart
-└── main.dart
+├── assets/
+│   ├── fonts/
+│   └── imgs/
+│
+├── lib/
+│    │
+│    ├── models/
+│    │ └── character_model.dart
+│    ├── controllers/
+│    │ └── character_controller.dart
+│    ├── views/
+│    │ ├── home_page.dart
+│    │ └── character_detail_page.dart
+│    ├── services/
+│    │ └── api_service.dart
+│    ├── theme/
+│    │ ├── app_colors.dart
+│    │ └── app_images.dart
+│    └── main.dart
 
 
 Essa divisão visa facilitar a manutenção, entendimento e escalabilidade do projeto.
 
 ---
+
+### 🔍 Explicação das Camadas do Projeto
+
+O projeto segue o padrão MVC (Model-View-Controller), proporcionando uma melhor separação de responsabilidades. Abaixo está a explicação de cada camada:
+
+- **models/**  
+  Contém as classes responsáveis por representar os dados da aplicação.  
+  Ex: `CharacterModel` define a estrutura de um personagem retornado pela API.
+
+- **controllers/**  
+  Gerencia a lógica de negócio e atua como intermediário entre a `View` e o `Model`.  
+  Ex: `CharacterController` controla a recuperação dos personagens e o estado da tela.
+
+- **views/**  
+  Reúne todas as telas e componentes visuais da aplicação.  
+  Ex: `HomePage` exibe a lista de personagens, enquanto `CharacterDetailPage` mostra os detalhes de um personagem selecionado.
+
+- **services/**  
+  Responsável pela comunicação com APIs externas e serviços auxiliares.  
+  Ex: `ApiService` faz as requisições HTTP à API do Rick and Morty.
+
+- **theme/**  
+  Centraliza definições de estilo, como cores e imagens padrão utilizadas pela interface.
+
+- **assets/**  
+  Armazena recursos estáticos como imagens e fontes utilizadas pela aplicação.
+
+Essa estrutura ajuda a manter o projeto limpo, modular e preparado para crescer com novas funcionalidades.
+
 
 ## 📋 Avaliação e Qualidade da Entrega
 

@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_final/components/navigation_drawer_component.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/theme/app_images.dart';
 
 class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
+  final bool isHomePage;
 
-  AppBarComponent({Key? key})
-      : preferredSize = const Size.fromHeight(kToolbarHeight * 2.2),
-        super(key: key);
+  AppBarComponent({Key? key, required this.isHomePage})
+    : preferredSize = const Size.fromHeight(kToolbarHeight * 2.2),
+      super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +18,15 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: AppColors.appBarColor,
       leading: Align(
         alignment: Alignment.topCenter,
-        child: IconButton(
-          icon: const Icon(Icons.menu),
-          color: Colors.white,
-          onPressed: () {},
-        ),
+        child: isHomePage ? IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () {
+                    NavigationDrawerComponent();
+
+                  },
+                  color: AppColors.white,
+                )
+                : const SizedBox(),
       ),
       actions: [
         Container(
@@ -48,7 +54,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(
                   color: AppColors.white,
                   fontSize: 14.5,
-                  letterSpacing: 1.16, 
+                  letterSpacing: 1.16,
                   fontWeight: FontWeight.w400,
                 ),
               ),

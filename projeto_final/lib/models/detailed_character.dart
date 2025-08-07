@@ -104,42 +104,6 @@ class DetailedCharacter {
     return 'DetailedCharacter(id: $id, name: $name, status: $status, species: $species, type: $type, gender: $gender, origin: $origin, location: $location, image: $image, episode: $episode, url: $url, created: $created)';
   }
 
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    final listEquals = const DeepCollectionEquality().equals;
-
-    return other is DetailedCharacter &&
-        other.id == id &&
-        other.name == name &&
-        other.status == status &&
-        other.species == species &&
-        other.type == type &&
-        other.gender == gender &&
-        other.origin == origin &&
-        other.location == location &&
-        other.image == image &&
-        listEquals(other.episode, episode) &&
-        other.url == url &&
-        other.created == created;
-  }
-
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        name.hashCode ^
-        status.hashCode ^
-        species.hashCode ^
-        type.hashCode ^
-        gender.hashCode ^
-        origin.hashCode ^
-        location.hashCode ^
-        image.hashCode ^
-        episode.hashCode ^
-        url.hashCode ^
-        created.hashCode;
-  }
 }
 
 class Origin {
