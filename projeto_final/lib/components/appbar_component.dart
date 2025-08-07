@@ -7,14 +7,13 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   final Size preferredSize;
 
   AppBarComponent({Key? key})
-      : preferredSize = const Size.fromHeight(131),
+      : preferredSize = const Size.fromHeight(kToolbarHeight * 2.2),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color(0xFF1B1B1F),
-      toolbarHeight: kToolbarHeight * 2.2,
+      backgroundColor: AppColors.appBarColor,
       leading: Align(
         alignment: Alignment.topCenter,
         child: IconButton(
@@ -49,6 +48,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
                 style: TextStyle(
                   color: AppColors.white,
                   fontSize: 14.5,
+                  letterSpacing: 1.16, 
                   fontWeight: FontWeight.w400,
                 ),
               ),
