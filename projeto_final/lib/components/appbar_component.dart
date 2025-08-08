@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final/components/navigation_drawer_component.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/theme/app_images.dart';
 
@@ -7,8 +6,10 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
   final bool isHomePage;
+  final void Function() onTap;
+  
 
-  AppBarComponent({Key? key, required this.isHomePage})
+  AppBarComponent({Key? key, required this.isHomePage, required this.onTap})
     : preferredSize = const Size.fromHeight(kToolbarHeight * 2.2),
       super(key: key);
 
@@ -21,8 +22,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
         child: isHomePage ? IconButton(
                   icon: const Icon(Icons.menu),
                   onPressed: () {
-                    NavigationDrawerComponent();
-
+                    onTap();
                   },
                   color: AppColors.white,
                 )

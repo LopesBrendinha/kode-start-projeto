@@ -6,6 +6,7 @@ import 'package:projeto_final/controllers/rickandmorty_controller.dart';
 import 'package:projeto_final/models/detailed_character.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
 
+
   List<DetailedCharacter> _characters = [];
   int _currentPage = 1;
   bool _isLoading = false;
@@ -26,15 +28,13 @@ class _HomePageState extends State<HomePage> {
   bool _hasError = false;
   String _errorMessage = '';
   String _search = '';
-  String? _statusFilter;
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
     _loadCharacters();
+    _scrollController.addListener(_onScroll);
   }
-
   void _onScroll() {
     if (_scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200 &&
@@ -85,6 +85,22 @@ class _HomePageState extends State<HomePage> {
     _loadCharacters();
   }
 
+Future<List<DetailedCharacter>> _fetchCharacters() async {
+  try {
+    print("Iniciando a busca de personagens...");
+    if (_search.isEmpty) {
+      print("Buscando todos os personagens na página $_currentPage");
+      return await rickandmortyController.fetchCharacters(_currentPage);
+    } else {
+      print("Buscando personagem com o nome: $_search");
+      return await rickandmortyController.fetchCharacterByName(_search);
+    }
+  } catch (e) {
+    print("Erro encontrado: $e");
+    throw Exception("Erro ao carregar personagens: $e");
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +114,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColors.backgroundColor,
       drawer: NavigationDrawerComponent(),
       body: Column(
-        children: [
+        children: <Widget>[
           Container(
             color: AppColors.appBarColor,
             padding: const EdgeInsets.all(10.0),
@@ -175,52 +191,42 @@ class _HomePageState extends State<HomePage> {
                         child: Text("Unknown"),
                       ),
                     ],
-                    onChanged: (value) {
-                      setState(() {
-                        _statusFilter = value;
-                        _currentPage = 1;
-                        _characters.clear();
-                        _isSearching =
-                            true; 
-                      });
-                      _loadCharacters();
-                    },
+                    onChanged: (value) {},
                   ),
                 ),
               ],
             ),
           ),
           Expanded(
-            child:
-                _hasError
-                    ? Center(
-                      child: Text(
-                        _errorMessage,
-                        style: TextStyle(color: AppColors.white),
-                      ),
-                    )
-                    : ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(vertical: 7.5),
-                      itemCount: _characters.length + (_isLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index < _characters.length) {
-                          final character = _characters[index];
-                          return CharactersCardComponent(
-                            characterName: character.name,
-                            characterImg: character.image,
-                            onTap: () {},
-                          );
-                        } else {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                      },
+            child: _hasError
+                ? Center(
+                    child: Text(
+                      _errorMessage,
+                      style: TextStyle(color: AppColors.white),
                     ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(vertical: 7.5),
+                    itemCount: _characters.length + (_isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index < _characters.length) {
+                        final character = _characters[index];
+                        return CharactersCardComponent(
+                          characterName: character.name,
+                          characterImg: character.image,
+                          onTap: () {},
+                        );
+                      } else {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
           ),
         ],
       ),
