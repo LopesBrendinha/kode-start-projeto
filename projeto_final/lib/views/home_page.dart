@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final/components/appbar_component.dart';
-import 'package:projeto_final/components/characters_card_component.dart';
+import 'package:projeto_final/components/card_character_component.dart';
 import 'package:projeto_final/components/navigation_drawer_component.dart';
 import 'package:projeto_final/controllers/rickandmorty_controller.dart';
 import 'package:projeto_final/models/detailed_character.dart';
 import 'package:projeto_final/theme/app_colors.dart';
+import 'package:projeto_final/views/details_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -54,7 +55,7 @@ class _HomePageState extends State<HomePage> {
       final newCharacters =
           _search.isEmpty
               ? await rickandmortyController.fetchCharacters(_currentPage)
-              : await rickandmortyController.fetchCharacterByName(_search);
+              : await rickandmortyController.fetchCharactersByName(_search);
 
       setState(() {
         if (_search.isEmpty) {
@@ -180,8 +181,7 @@ class _HomePageState extends State<HomePage> {
                         _statusFilter = value;
                         _currentPage = 1;
                         _characters.clear();
-                        _isSearching =
-                            true; 
+                        _isSearching = true;
                       });
                       _loadCharacters();
                     },
@@ -206,10 +206,20 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (context, index) {
                         if (index < _characters.length) {
                           final character = _characters[index];
-                          return CharactersCardComponent(
+                          return CardCharacterComponent(
                             characterName: character.name,
                             characterImg: character.image,
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => DetailsPage(
+                                        characterId: character.id,
+                                      ),
+                                ),
+                              );
+                            },
                           );
                         } else {
                           return const Center(

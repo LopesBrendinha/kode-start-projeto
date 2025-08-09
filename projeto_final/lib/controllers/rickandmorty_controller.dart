@@ -11,15 +11,13 @@ class RickandmortyController {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List<dynamic> characters = data['results'];
-      return characters
-          .map((char) => DetailedCharacter.fromMap(char))
-          .toList(); 
+      return characters.map((char) => DetailedCharacter.fromMap(char)).toList();
     } else {
       throw Exception("Erro durante a busca: ${response.statusCode}");
     }
   }
 
-  Future<List<DetailedCharacter>> fetchCharacterByName(String name) async {
+  Future<List<DetailedCharacter>> fetchCharactersByName(String name) async {
     if (name != null) {
       final response = await http.get(
         Uri.parse('https://rickandmortyapi.com/api/character/?name=${name}'),
@@ -38,16 +36,28 @@ class RickandmortyController {
     }
   }
 
-  Future<List<DetailedCharacter>> fetchCharactersByFilter(String name, String filtro) async {
+  Future<DetailedCharacter> fetchCharacterById(int id) async {
+    final response = await http.get(Uri.parse('https://rickandmortyapi.com/api/character/$id'));
+    
+    if (response.statusCode == 200) {
+      return DetailedCharacter.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Falha ao carregar personagem com id $id');
+    }
+  }
+
+
+  Future<List<DetailedCharacter>> fetchCharactersByFilter(
+    String name,
+    String filtro,
+  ) async {
     final response = await http.get(
       Uri.parse('https://rickandmortyapi.com/api/character/'),
     );
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List<dynamic> characters = data['results'];
-      return characters
-          .map((char) => DetailedCharacter.fromMap(char))
-          .toList(); 
+      return characters.map((char) => DetailedCharacter.fromMap(char)).toList();
     } else {
       throw Exception("Erro durante a busca: ${response.statusCode}");
     }

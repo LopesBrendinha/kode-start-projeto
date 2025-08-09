@@ -95,8 +95,9 @@ class DetailedCharacter {
 
   String toJson() => json.encode(toMap());
 
-  factory DetailedCharacter.fromJson(String source) =>
-      DetailedCharacter.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory DetailedCharacter.fromJson(Map<String, dynamic> json) {
+    return DetailedCharacter.fromMap(json);
+  }
 
   @override
   String toString() {

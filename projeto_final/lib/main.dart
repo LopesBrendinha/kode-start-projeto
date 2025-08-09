@@ -14,8 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: HomePage(),
+      title: 'RICK AND MORTY API',
+      initialRoute: "/homePage",
+      routes: {
+        "/homePage": (context) => HomePage(),
+      },
       theme: ThemeData(
         fontFamily: "Lato"
       ),
