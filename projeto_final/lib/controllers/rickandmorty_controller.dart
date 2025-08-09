@@ -62,4 +62,15 @@ class RickandmortyController {
       throw Exception("Erro durante a busca: ${response.statusCode}");
     }
   }
+
+
+  Future<Map<String, dynamic>> fetchEpisodeByUrl(String url) async {
+  final response = await http.get(Uri.parse(url)); 
+
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body);
+  } else {
+    throw Exception('Falha ao carregar episódio com URL $url');
+  }
+}
 }

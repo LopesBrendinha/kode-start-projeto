@@ -46,8 +46,6 @@ class _DetailsPageState extends State<DetailsPage> {
               ],
             );
           } else if (snapshot.hasError) {
-            print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            print(snapshot.error);
             return Center(
               child: Text(
                 "Ocorreu um erro.",
