@@ -6,14 +6,6 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 
 ## 📱 Funcionalidades Implementadas
 
-- Listagem de personagens com nome e imagem.
-- Tela de detalhes com mais informações do personagem selecionado.
-- Navegação entre telas.
-- Tratamento de erros e carregamento.
-- Consumo de API REST com parsing de JSON.
-- Responsividade e usabilidade amigável.
-
-
 ### ✅ Funcionalidades Obrigatórias (Fidelidade ao Figma)
 
 #### 🎯 Navegação e Exibição dos Personagens
@@ -22,7 +14,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - Cada card exibe o nome e a imagem do personagem seguindo fielmente o design do Figma, com a tipografia replicada exatamente, além do posicionamento preciso da imagem no card e o espaçamento adequado entre os elementos e o tamanho dos mesmo, para manter a harmonia visual do layout original.
 - Os cards são organizados verticalmente, proporcionando uma rolagem suave e intuitiva.
 
-![IMG](Endereço da IMG)
+![HomePage](../Imgs&Gifs/Home.gif)
 
 #### 🔍 Tela de Detalhes do Personagem
 
@@ -62,7 +54,15 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 ![IMG](Endereço da IMG)
 
 
+#### 🗂️ Filtro Avançado de Personagens
+- Permite refinar a lista de personagens aplicando filtros combinados para facilitar a busca.
+- Status: Filtra pelos estados Alive, Dead ou Unknown.
+- Species: Mostra apenas personagens da espécie selecionada.
+- Type: Exibe resultados de acordo com o tipo especificado.
+- Gender: Filtra conforme o gênero escolhido.
+- Os filtros podem ser utilizados junto com a busca por nome, seja parcial ou completa, tornando a localização dos personagens ainda mais rápida e precisa.
 
+![IMG](Endereço da IMG)
 
 ---
 
