@@ -15,10 +15,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final RickandmortyController rickandmortyController =
-      RickandmortyController();
+  final RickandmortyController rickandmortyController = RickandmortyController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<DetailedCharacter> _characters = [];
   int _currentPage = 1;
@@ -36,11 +36,17 @@ class _HomePageState extends State<HomePage> {
     _loadCharacters();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _searchController.dispose();
+    super.dispose();
+  }
+
   void _onScroll() {
     if (_scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent - 200 &&
-        !_isLoading &&
-        _search.isEmpty) {
+        !_isLoading) {
       _loadCharacters();
     }
   }
@@ -52,18 +58,26 @@ class _HomePageState extends State<HomePage> {
     });
 
     try {
-      final newCharacters =
-          _search.isEmpty
-              ? await rickandmortyController.fetchCharacters(_currentPage)
-              : await rickandmortyController.fetchCharactersByName(_search);
+      List<DetailedCharacter> newCharacters;
+
+      if (_search != null) {
+        newCharacters = await rickandmortyController.fetchCharactersByName(
+          _search,
+          _currentPage,
+        );
+      } else {
+        newCharacters = await rickandmortyController.fetchCharacters(
+          _currentPage,
+        );
+      }
 
       setState(() {
-        if (_search.isEmpty) {
-          _characters.addAll(newCharacters);
-          _currentPage++;
-        } else {
+        if (_currentPage == 1) {
           _characters = newCharacters;
+        } else {
+          _characters.addAll(newCharacters);
         }
+        _currentPage++;
       });
     } catch (e) {
       setState(() {
@@ -82,6 +96,8 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _currentPage = 1;
       _characters.clear();
+      _search = "";
+      _searchController.clear();
     });
     _loadCharacters();
   }
@@ -95,6 +111,7 @@ class _HomePageState extends State<HomePage> {
         onTap: () {
           _scaffoldKey.currentState?.openDrawer();
         },
+        onTap2: _refresh,
       ),
       backgroundColor: AppColors.backgroundColor,
       drawer: NavigationDrawerComponent(),
@@ -108,6 +125,7 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   flex: 2,
                   child: TextField(
+                    controller: _searchController,
                     decoration: InputDecoration(
                       labelText: "Pesquise aqui",
                       labelStyle: TextStyle(
@@ -125,7 +143,18 @@ class _HomePageState extends State<HomePage> {
                           color: AppColors.primaryColorLight,
                         ),
                       ),
-                      suffixIcon: Icon(Icons.search, color: AppColors.white),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.search, color: AppColors.white),
+                        onPressed: () {
+                          setState(() {
+                            _search = _searchController.text;
+                            _currentPage = 1;
+                            _characters.clear();
+                            _isSearching = true;
+                          });
+                          _loadCharacters();
+                        },
+                      ),
                     ),
                     style: TextStyle(
                       color: AppColors.white,
@@ -191,46 +220,44 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Expanded(
-            child:
-                _hasError
-                    ? Center(
-                      child: Text(
-                        _errorMessage,
-                        style: TextStyle(color: AppColors.white),
-                      ),
-                    )
-                    : ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(vertical: 7.5),
-                      itemCount: _characters.length + (_isLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index < _characters.length) {
-                          final character = _characters[index];
-                          return CardCharacterComponent(
-                            characterName: character.name,
-                            characterImg: character.image,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => DetailsPage(
-                                        characterId: character.id,
-                                      ),
-                                ),
-                              );
-                            },
-                          );
-                        } else {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                      },
+            child: _hasError
+                ? Center(
+                    child: Text(
+                      _errorMessage,
+                      style: TextStyle(color: AppColors.white),
                     ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(vertical: 7.5),
+                    itemCount: _characters.length + (_isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index < _characters.length) {
+                        final character = _characters[index];
+                        return CardCharacterComponent(
+                          characterName: character.name,
+                          characterImg: character.image,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsPage(
+                                  characterId: character.id,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return const Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                    },
+                  ),
           ),
         ],
       ),

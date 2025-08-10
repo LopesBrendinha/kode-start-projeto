@@ -17,35 +17,41 @@ class RickandmortyController {
     }
   }
 
-  Future<List<DetailedCharacter>> fetchCharactersByName(String name) async {
-    if (name != null) {
-      final response = await http.get(
-        Uri.parse('https://rickandmortyapi.com/api/character/?name=${name}'),
-      );
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+  Future<List<DetailedCharacter>> fetchCharactersByName(String name, int page,) async {
+    final response = await http.get(
+      Uri.parse(
+        'https://rickandmortyapi.com/api/character/?name=$name&page=$page',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+
+      if (data['results'] != null) {
         final List<dynamic> characters = data['results'];
+        print(data['result']);
         return characters
             .map((char) => DetailedCharacter.fromJson(char))
             .toList();
       } else {
-        throw Exception("Erro durante a busca pelo personagem com o $name");
+        return [];
       }
     } else {
-      throw Exception("Nome não pode ser nulo");
+      throw Exception("Erro durante a busca pelo personagem com o nome $name");
     }
   }
 
   Future<DetailedCharacter> fetchCharacterById(int id) async {
-    final response = await http.get(Uri.parse('https://rickandmortyapi.com/api/character/$id'));
-    
+    final response = await http.get(
+      Uri.parse('https://rickandmortyapi.com/api/character/$id'),
+    );
+
     if (response.statusCode == 200) {
       return DetailedCharacter.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Falha ao carregar personagem com id $id');
     }
   }
-
 
   Future<List<DetailedCharacter>> fetchCharactersByFilter(
     String name,
@@ -63,14 +69,13 @@ class RickandmortyController {
     }
   }
 
-
   Future<Map<String, dynamic>> fetchEpisodeByUrl(String url) async {
-  final response = await http.get(Uri.parse(url)); 
+    final response = await http.get(Uri.parse(url));
 
-  if (response.statusCode == 200) {
-    return jsonDecode(response.body);
-  } else {
-    throw Exception('Falha ao carregar episódio com URL $url');
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Falha ao carregar episódio com URL $url');
+    }
   }
-}
 }

@@ -34,6 +34,9 @@ class _DetailsPageState extends State<DetailsPage> {
         onTap: () {
           _scaffoldKey.currentState?.openDrawer();
         },
+        onTap2: (){
+          null;
+        },
       ),
       backgroundColor: AppColors.backgroundColor,
       body: FutureBuilder<DetailedCharacter>(
