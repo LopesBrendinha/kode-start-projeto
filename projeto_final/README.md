@@ -23,7 +23,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - O status do personagem é indicado por um circulo colorido: verde quando está vivo, vermelho se estiver morto e cinza quando o status é desconhecido.
 - Todas as informações são exibidas de forma clara e organizada, seguindo fielmente o design do Figma, com tipografia replicada exatamente, incluindo estilos como blalck, medium, regular e light, além do espaçamento preciso entre palavras e linhas, garantindo a mesma harmonia visual do projeto original.
 
-![IMG](Endereço da IMG)
+![Card com Detalhes](../Imgs&Gifs/CardCharacter.gif)
 
 #### 🔄 Navegação entre Telas
 
