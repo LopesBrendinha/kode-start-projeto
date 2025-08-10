@@ -54,7 +54,12 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 
 ![Tela de Splash](Endereço da IMG)
 
-#### 🎛️ Filtros Avançados por Categoria:
+#### 🔍 Busca por Nome
+- Permite pesquisar personagens digitando o nome completo ou apenas parte dele.
+- O sistema retorna resultados em tempo real, facilitando a localização do personagem desejado.
+- A busca é sensível a trechos do nome, tornando a experiência mais prática e eficiente.
+
+![IMG](Endereço da IMG)
 
 
 
