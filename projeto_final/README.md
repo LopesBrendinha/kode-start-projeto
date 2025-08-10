@@ -46,9 +46,17 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 
 ### 💡 Recursos Extras
 
+#### 🌅 Tela de Splash
+- Implementação de uma splash screen elegante que aparece ao abrir o aplicativo.
+- A tela inicial exibe a logo e uma img do tema do app, criando uma primeira impressão profissional.
+- A splash screen tem duração controlada para garantir carregamento suave dos recursos.
+- Essa funcionalidade contribui para uma experiência de usuário mais fluida e agradável desde o início.
+
+![Tela de Splash](Endereço da IMG)
+
 #### 🎛️ Filtros Avançados por Categoria:
 
----
+
 
 
 ---
@@ -72,8 +80,6 @@ O estado foi mantido simples (com `setState`) devido à natureza do desafio, que
 
 ### 📄 Organização do Projeto
 O projeto foi dividido em pastas conforme o padrão MVC:
-
-projeto_final
 
 <pre style="background:#f5f5f5; padding:10px; border-radius:5px; font-family: monospace;">
 projeto_final/

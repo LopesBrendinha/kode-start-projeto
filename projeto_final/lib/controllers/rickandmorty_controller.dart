@@ -17,30 +17,6 @@ class RickandmortyController {
     }
   }
 
-  Future<List<DetailedCharacter>> fetchCharactersByName(String name, int page,) async {
-    final response = await http.get(
-      Uri.parse(
-        'https://rickandmortyapi.com/api/character/?name=$name&page=$page',
-      ),
-    );
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-
-      if (data['results'] != null) {
-        final List<dynamic> characters = data['results'];
-        print(data['result']);
-        return characters
-            .map((char) => DetailedCharacter.fromJson(char))
-            .toList();
-      } else {
-        return [];
-      }
-    } else {
-      throw Exception("Erro durante a busca pelo personagem com o nome $name");
-    }
-  }
-
   Future<DetailedCharacter> fetchCharacterById(int id) async {
     final response = await http.get(
       Uri.parse('https://rickandmortyapi.com/api/character/$id'),
@@ -53,13 +29,27 @@ class RickandmortyController {
     }
   }
 
-  Future<List<DetailedCharacter>> fetchCharactersByFilter(
-    String name,
-    String filtro,
-  ) async {
-    final response = await http.get(
-      Uri.parse('https://rickandmortyapi.com/api/character/'),
-    );
+  Future<List<DetailedCharacter>> fetchCharactersByFilter({String? name, String? status, String? species, String? type, String? gender, int page = 1,}) async {
+    String url = 'https://rickandmortyapi.com/api/character/?page=$page';
+  
+    if (name != null && name.isNotEmpty) {
+      url += '&name=$name';
+    }
+    if (status != null) {
+      url += '&status=${status.toLowerCase()}';
+    }
+    if (species != null) {
+      url += '&species=$species';
+    }
+    if (type != null) {
+      url += '&type=$type';
+    }
+    if (gender != null) {
+      url += '&gender=${gender.toLowerCase()}';
+    }
+
+    final response = await http.get(Uri.parse(url));
+
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final List<dynamic> characters = data['results'];

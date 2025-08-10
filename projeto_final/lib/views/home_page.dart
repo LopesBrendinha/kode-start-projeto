@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final RickandmortyController rickandmortyController = RickandmortyController();
+  final RickandmortyController rickandmortyController =
+      RickandmortyController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
@@ -26,7 +27,10 @@ class _HomePageState extends State<HomePage> {
   bool _hasError = false;
   String _errorMessage = '';
   String _search = '';
-  String? _statusFilter;
+  String? _statusFilter = null;
+  String? _speciesFilter = null;
+  String? _typeFilter = null;
+  String? _genderFilter = null;
 
   @override
   void initState() {
@@ -59,10 +63,18 @@ class _HomePageState extends State<HomePage> {
     try {
       List<DetailedCharacter> newCharacters;
 
-      if (_search != null) {
-        newCharacters = await rickandmortyController.fetchCharactersByName(
-          _search,
-          _currentPage,
+      if (_search != null ||
+          _speciesFilter != null ||
+          _statusFilter != null ||
+          _genderFilter != null ||
+          _typeFilter != null) {
+        newCharacters = await rickandmortyController.fetchCharactersByFilter(
+          name: _search,
+          species: _speciesFilter,
+          status: _statusFilter,
+          type: _typeFilter,
+          gender: _genderFilter,
+          page: _currentPage,
         );
       } else {
         newCharacters = await rickandmortyController.fetchCharacters(
@@ -90,12 +102,24 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void _applyFilters() {
+    setState(() {
+      _currentPage = 1;
+      _characters.clear();
+    });
+    _loadCharacters();
+  }
+
   void _refresh() {
     setState(() {
       _currentPage = 1;
       _characters.clear();
       _search = "";
       _searchController.clear();
+      _statusFilter = null;
+      _speciesFilter = null;
+      _typeFilter = null;
+      _genderFilter = null;
     });
     _loadCharacters();
   }
@@ -125,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      labelText: "Pesquise aqui",
+                      labelText: "Search",
                       labelStyle: TextStyle(
                         color: AppColors.white,
                         fontWeight: FontWeight.w400,
@@ -169,93 +193,174 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 SizedBox(width: 16),
-                Expanded(
-                  flex: 1,
-                  child: DropdownButtonFormField<String>(
-                    dropdownColor: AppColors.appBarColor,
-                    decoration: InputDecoration(
-                      labelText: "Filtro",
-                      labelStyle: TextStyle(
-                        color: AppColors.white,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: "Lato",
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColorDark,
-                        ),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColorLight,
-                        ),
-                      ),
-                    ),
-                    style: TextStyle(color: AppColors.white),
-                    iconEnabledColor: AppColors.white,
-                    items: [
-                      DropdownMenuItem(value: "Alive", child: Text("Alive")),
-                      DropdownMenuItem(value: "Dead", child: Text("Dead")),
-                      DropdownMenuItem(
-                        value: "Unknown",
-                        child: Text("Unknown"),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        _statusFilter = value;
-                        _currentPage = 1;
-                        _characters.clear();
-                      });
-                      _loadCharacters();
-                    },
-                  ),
+                IconButton(
+                  icon: Icon(Icons.filter_alt, color: AppColors.white),
+                  onPressed: _showFilterDialog,
                 ),
               ],
             ),
           ),
           Expanded(
-            child: _hasError
-                ? Center(
-                    child: Text(
-                      _errorMessage,
-                      style: TextStyle(color: AppColors.white),
-                    ),
-                  )
-                : ListView.builder(
-                    controller: _scrollController,
-                    padding: const EdgeInsets.symmetric(vertical: 7.5),
-                    itemCount: _characters.length + (_isLoading ? 1 : 0),
-                    itemBuilder: (context, index) {
-                      if (index < _characters.length) {
-                        final character = _characters[index];
-                        return CardCharacterComponent(
-                          characterName: character.name,
-                          characterImg: character.image,
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailsPage(
-                                  characterId: character.id,
+            child:
+                _hasError
+                    ? Center(
+                      child: Text(
+                        _errorMessage,
+                        style: TextStyle(color: AppColors.white),
+                      ),
+                    )
+                    : ListView.builder(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.symmetric(vertical: 7.5),
+                      itemCount: _characters.length + (_isLoading ? 1 : 0),
+                      itemBuilder: (context, index) {
+                        if (index < _characters.length) {
+                          final character = _characters[index];
+                          return CardCharacterComponent(
+                            characterName: character.name,
+                            characterImg: character.image,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder:
+                                      (context) => DetailsPage(
+                                        characterId: character.id,
+                                      ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      } else {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                              );
+                            },
+                          );
+                        } else {
+                          return const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                      },
+                    ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showFilterDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: AppColors.appBarColor,
+              title: Text(
+                "Advanced Filters",
+                style: TextStyle(color: AppColors.white),
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildFilterDropdown(
+                      value: _statusFilter,
+                      items: ['Alive', 'Dead', 'Unknown'],
+                      hint: 'Status',
+                      onChanged: (value) => _statusFilter = value,
+                    ),
+
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Species',
+                        labelStyle: TextStyle(color: AppColors.white),
+                      ),
+                      style: TextStyle(color: AppColors.white),
+                      onChanged:
+                          (value) =>
+                              _speciesFilter = value.isNotEmpty ? value : null,
+                    ),
+
+                    TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Type',
+                        labelStyle: TextStyle(color: AppColors.white),
+                      ),
+                      style: TextStyle(color: AppColors.white),
+                      onChanged:
+                          (value) =>
+                              _typeFilter = value.isNotEmpty ? value : null,
+                    ),
+
+                    _buildFilterDropdown(
+                      value: _genderFilter,
+                      items: ['Female', 'Male', 'Genderless', 'Unknown'],
+                      hint: 'Gender',
+                      onChanged: (value) => _genderFilter = value,
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  child: Text(
+                    'CLEAR',
+                    style: TextStyle(color: AppColors.primaryColorLight),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _statusFilter = null;
+                      _speciesFilter = null;
+                      _typeFilter = null;
+                      _genderFilter = null;
+                    });
+                  },
+                ),
+                TextButton(
+                  child: Text(
+                    'APPLY',
+                    style: TextStyle(color: AppColors.primaryColorLight),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _applyFilters();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildFilterDropdown({
+    required String? value,
+    required List<String> items,
+    required String hint,
+    required Function(String?) onChanged,
+  }) {
+    return DropdownButtonFormField<String>(
+      value: value,
+      dropdownColor: AppColors.appBarColor,
+      decoration: InputDecoration(
+        labelText: hint,
+        labelStyle: TextStyle(color: AppColors.white),
+      ),
+      style: TextStyle(color: AppColors.white),
+      items: [
+        DropdownMenuItem(
+          value: null,
+          child: Text('Select $hint', style: TextStyle(color: AppColors.white)),
+        ),
+        ...items.map(
+          (item) => DropdownMenuItem(
+            value: item,
+            child: Text(item, style: TextStyle(color: AppColors.white)),
+          ),
+        ),
+      ],
+      onChanged: onChanged,
     );
   }
 }
