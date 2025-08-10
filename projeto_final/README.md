@@ -75,47 +75,28 @@ O projeto foi dividido em pastas conforme o padrão MVC:
 
 projeto_final
 
-│
-
+<pre style="background:#f5f5f5; padding:10px; border-radius:5px; font-family: monospace;">
+projeto_final/
 ├── assets/
-
 │   ├── fonts/
-
 │   └── imgs/
-
-│
-
 ├── lib/
-
-│    │
-
-│    ├── models/
-
-│    │ └── character_model.dart
-
-│    ├── controllers/
-
-│    │ └── character_controller.dart
-
-│    ├── views/
-
-│    │ ├── home_page.dart
-
-│    │ └── character_detail_page.dart
-
-│    ├── services/
-
-│    │ └── api_service.dart
-
-│    ├── theme/
-
-│    │ ├── app_colors.dart
-
-│    │ └── app_images.dart
-
-│    └── main.dart
-
+│   ├── models/
+│   │   └── character_model.dart
+│   ├── controllers/
+│   │   └── character_controller.dart
+│   ├── views/
+│   │   ├── home_page.dart
+│   │   └── character_detail_page.dart
+│   ├── services/
+│   │   └── api_service.dart
+│   ├── theme/
+│   │   ├── app_colors.dart
+│   │   └── app_images.dart
+│   └── main.dart
 └── pubspec.yaml
+</pre>
+
 
 Essa divisão visa facilitar a manutenção, entendimento e escalabilidade do projeto.
 
