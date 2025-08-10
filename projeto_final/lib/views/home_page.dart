@@ -23,7 +23,6 @@ class _HomePageState extends State<HomePage> {
   List<DetailedCharacter> _characters = [];
   int _currentPage = 1;
   bool _isLoading = false;
-  bool _isSearching = false;
   bool _hasError = false;
   String _errorMessage = '';
   String _search = '';
@@ -87,7 +86,6 @@ class _HomePageState extends State<HomePage> {
     } finally {
       setState(() {
         _isLoading = false;
-        _isSearching = false;
       });
     }
   }
@@ -150,7 +148,6 @@ class _HomePageState extends State<HomePage> {
                             _search = _searchController.text;
                             _currentPage = 1;
                             _characters.clear();
-                            _isSearching = true;
                           });
                           _loadCharacters();
                         },
@@ -166,7 +163,6 @@ class _HomePageState extends State<HomePage> {
                         _search = value;
                         _currentPage = 1;
                         _characters.clear();
-                        _isSearching = true;
                       });
                       _loadCharacters();
                     },
@@ -210,7 +206,6 @@ class _HomePageState extends State<HomePage> {
                         _statusFilter = value;
                         _currentPage = 1;
                         _characters.clear();
-                        _isSearching = true;
                       });
                       _loadCharacters();
                     },

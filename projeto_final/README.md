@@ -4,7 +4,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 
 ---
 
-## 📱 Funcionalidades
+## 📱 Funcionalidades Implementadas
 
 - Listagem de personagens com nome e imagem.
 - Tela de detalhes com mais informações do personagem selecionado.
@@ -12,6 +12,44 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - Tratamento de erros e carregamento.
 - Consumo de API REST com parsing de JSON.
 - Responsividade e usabilidade amigável.
+
+
+### ✅ Funcionalidades Obrigatórias (Fidelidade ao Figma)
+
+#### 🎯 Navegação e Exibição dos Personagens
+
+- A lista permite navegação contínua por meio de scroll, facilitando o acesso a todos os personagens.
+- Cada card exibe o nome e a imagem do personagem seguindo fielmente o design do Figma, com a tipografia replicada exatamente, além do posicionamento preciso da imagem no card e o espaçamento adequado entre os elementos e o tamanho dos mesmo, para manter a harmonia visual do layout original.
+- Os cards são organizados verticalmente, proporcionando uma rolagem suave e intuitiva.
+
+![IMG](Endereço da IMG)
+
+#### 🔍 Tela de Detalhes do Personagem
+
+- Apresenta o nome, a imagem, a espécie, o gênero, o status, a origem, a última localização e a primeira aparição do personagem.
+- A imagem fica sobreposta ao card, exatamente como no layout do Figma, garantindo uma aparência fiel ao design original.
+- O status do personagem é indicado por um circulo colorido: verde quando está vivo, vermelho se estiver morto e cinza quando o status é desconhecido.
+- Todas as informações são exibidas de forma clara e organizada, seguindo fielmente o design do Figma, com tipografia replicada exatamente, incluindo estilos como blalck, medium, regular e light, além do espaçamento preciso entre palavras e linhas, garantindo a mesma harmonia visual do projeto original.
+
+![IMG](Endereço da IMG)
+
+#### 🔄 Navegação entre Telas
+
+- Navegação fluida e intuitiva entre a lista de personagens e a tela de detalhes.
+- Ao tocar em um card, o usuário é direcionado para a tela com informações detalhadas do personagem.
+- Transições suaves mantêm a consistência visual e uma experiência agradável.
+- Foi adicionada uma forma prática de voltar para a lista clicando no logo, facilitando a navegação.
+
+![IMG](Endereço da IMG)
+---
+
+
+### 💡 Recursos Extras
+
+#### 🎛️ Filtros Avançados por Categoria:
+
+---
+
 
 ---
 
@@ -36,27 +74,48 @@ O estado foi mantido simples (com `setState`) devido à natureza do desafio, que
 O projeto foi dividido em pastas conforme o padrão MVC:
 
 projeto_final
+
 │
+
 ├── assets/
+
 │   ├── fonts/
+
 │   └── imgs/
+
 │
+
 ├── lib/
+
 │    │
+
 │    ├── models/
+
 │    │ └── character_model.dart
+
 │    ├── controllers/
+
 │    │ └── character_controller.dart
+
 │    ├── views/
+
 │    │ ├── home_page.dart
+
 │    │ └── character_detail_page.dart
+
 │    ├── services/
+
 │    │ └── api_service.dart
+
 │    ├── theme/
+
 │    │ ├── app_colors.dart
+
 │    │ └── app_images.dart
+
 │    └── main.dart
 
+└── pubspec.yaml
 
 Essa divisão visa facilitar a manutenção, entendimento e escalabilidade do projeto.
 
@@ -109,12 +168,6 @@ Busquei garantir uma **entrega completa e bem documentada**, conforme orientaç�
 - **API REST** pública [Rick and Morty API](https://rickandmortyapi.com/)
 - **http** package
 - **MVC** como padrão arquitetural
-
----
-
-## 📸 Capturas de Tela
-
-> Adicione aqui prints do app em funcionamento, tanto da tela de listagem quanto da tela de detalhes, para ilustrar a entrega visualmente.
 
 ---
 

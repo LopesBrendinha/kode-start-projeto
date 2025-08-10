@@ -8,14 +8,7 @@ class DetailedCharacterCardComponent extends StatelessWidget {
   final RickandmortyController controller = RickandmortyController();
   final DetailedCharacter character;
 
-  void getEpisode() async {
-  try {
-    String url = character.episode as String; 
-    Map<String, dynamic> episodeData = await controller.fetchEpisodeByUrl(url);
-  } catch (e) {
-    print(e); 
-  }
-}
+  
 
   @override
   Widget build(BuildContext context) {
