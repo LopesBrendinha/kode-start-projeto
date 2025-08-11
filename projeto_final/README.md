@@ -32,7 +32,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - Transições suaves mantêm a consistência visual e uma experiência agradável.
 - Foi adicionada uma forma prática de voltar para a lista clicando no logo, facilitando a navegação.
 
-![IMG](Endereço da IMG)
+![Navegacao](../Imgs&Gifs/Navegacao.gif)
 ---
 
 
@@ -51,7 +51,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - O sistema retorna resultados em tempo real, facilitando a localização do personagem desejado.
 - A busca é sensível a trechos do nome, tornando a experiência mais prática e eficiente.
 
-![IMG](Endereço da IMG)
+![Pesquisa](../Imgs&Gifs/Navegacao.gif)
 
 
 #### 🗂️ Filtro Avançado de Personagens
@@ -62,7 +62,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - Gender: Filtra conforme o gênero escolhido.
 - Os filtros podem ser utilizados junto com a busca por nome, seja parcial ou completa, tornando a localização dos personagens ainda mais rápida e precisa.
 
-![IMG](Endereço da IMG)
+![Filtro](../Imgs&Gifs/Filtro.gif)
 
 ---
 
