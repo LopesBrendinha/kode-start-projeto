@@ -36,6 +36,9 @@ dependencies:
   flutter_native_splash: ^2.4.6
   http: ^1.4.0
   flutter_multi_select_items: ^0.4.3
+  sign_button: ^2.0.6
+  firebase_auth:  ^4.17.4
+  google_sign_in: ^6.1.5
 
 dev_dependencies:
   flutter_test:
