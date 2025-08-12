@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '433368136843',
     projectId: 'rickandmortyapi-d5e6d',
     storageBucket: 'rickandmortyapi-d5e6d.firebasestorage.app',
+    iosClientId: '433368136843-hn5a3v9srlhefirerldmvpv97rbki8br.apps.googleusercontent.com',
     iosBundleId: 'com.example.projetoFinal',
   );
+
 }

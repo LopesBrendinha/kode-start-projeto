@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:projeto_final/firebase_options.dart';
 import 'package:projeto_final/views/home_page.dart';
 import 'package:projeto_final/views/login_page.dart';
+import 'package:projeto_final/views/signup_page.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/homePage": (context) => HomePage(),
         "/loginPage" : (context) => LoginPage(),
+        "/signupPage" : (context) => SignupPage(),
       },
       theme: ThemeData(
         fontFamily: "Lato"
