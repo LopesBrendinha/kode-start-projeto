@@ -7,6 +7,7 @@ import 'package:projeto_final/views/intro_pages.dart';
 import 'package:projeto_final/views/login_page.dart';
 import 'package:projeto_final/views/profile_page.dart';
 import 'package:projeto_final/views/signup_page.dart';
+import 'package:projeto_final/views/splash_page.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         "/signupPage" : (context) => SignupPage(),
         "/introPages" : (context) => IntroPages(),
         "/profilePage" : (context) => ProfilePage(),
+        "/splashPage" : (context) => SplashPage(),
       },
       theme: ThemeData(
         fontFamily: "Lato"

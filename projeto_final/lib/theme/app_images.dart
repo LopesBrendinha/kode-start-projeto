@@ -9,5 +9,6 @@ class AppImages {
   static const intro3 = 'assets/imgs/intro3.png';
   static const intro4 = 'assets/imgs/intro4.png';
   static const erro404 = 'assets/imgs/erro404.png';
+  static const picles = 'assets/imgs/picles.png';
   
 }
