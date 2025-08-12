@@ -5,6 +5,7 @@ import 'package:projeto_final/firebase_options.dart';
 import 'package:projeto_final/views/home_page.dart';
 import 'package:projeto_final/views/intro_pages.dart';
 import 'package:projeto_final/views/login_page.dart';
+import 'package:projeto_final/views/profile_page.dart';
 import 'package:projeto_final/views/signup_page.dart';
 
 void main() async {
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         "/loginPage" : (context) => LoginPage(),
         "/signupPage" : (context) => SignupPage(),
         "/introPages" : (context) => IntroPages(),
+        "/profilePage" : (context) => ProfilePage(),
       },
       theme: ThemeData(
         fontFamily: "Lato"

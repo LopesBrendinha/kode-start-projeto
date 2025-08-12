@@ -37,6 +37,7 @@ class _DetailsPageState extends State<DetailsPage> {
         onTap2: (){
           null;
         },
+        isProfilePage: false,
       ),
       backgroundColor: AppColors.backgroundColor,
       body: FutureBuilder<DetailedCharacter>(

@@ -6,11 +6,12 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
   final bool isHomePage;
+  final bool isProfilePage;
   final void Function() onTap;
   final void Function() onTap2;
   
 
-  AppBarComponent({Key? key, required this.isHomePage, required this.onTap, required this.onTap2})
+  AppBarComponent({Key? key, required this.isHomePage, required this.onTap, required this.onTap2, required this.isProfilePage})
     : preferredSize = const Size.fromHeight(kToolbarHeight * 2.2),
       super(key: key);
 
@@ -39,11 +40,11 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
         Container(
           alignment: Alignment.topCenter,
           padding: const EdgeInsets.only(right: 13.98, top: 12),
-          child: GestureDetector(
+          child: isProfilePage ? null : GestureDetector(
             onTap: () {
-            
+              Navigator.pushNamed(context, "/profilePage");
             },
-            child: Image.asset(
+            child:  Image.asset(
               AppImages.icon1,
               height: 31.46,
               width: 31.46,

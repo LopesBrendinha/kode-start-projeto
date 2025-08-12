@@ -27,13 +27,12 @@ class _HomePageState extends State<HomePage> {
   int _currentPage = 1;
   bool _isLoading = false;
   bool _hasError = false;
-  String _errorMessage = '';
   String _search = '';
   String? _statusFilter = null;
   String? _speciesFilter = null;
   String? _typeFilter = null;
   String? _genderFilter = null;
-  bool _is404Error = false;
+
 
   @override
   void initState() {
@@ -94,19 +93,8 @@ class _HomePageState extends State<HomePage> {
         _currentPage++;
       });
     } catch (e) {
-      bool is404 = false;
-      String errorMessage = 'Ocorreu um erro';
-
-      if (e is http.ClientException) {
-        is404 = e.message.contains('404');
-        errorMessage = e.message;
-      } else {
-        errorMessage = e.toString();
-      }
       setState(() {
         _hasError = true;
-        _errorMessage = errorMessage;
-        _is404Error = is404;
       });
     } finally {
       setState(() {
@@ -147,6 +135,7 @@ class _HomePageState extends State<HomePage> {
           _scaffoldKey.currentState?.openDrawer();
         },
         onTap2: _refresh,
+        isProfilePage: false,
       ),
       backgroundColor: AppColors.backgroundColor,
       drawer: NavigationDrawerComponent(),
