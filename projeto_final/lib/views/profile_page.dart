@@ -52,6 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
         setState(() {
           _userName = userDoc.data()?['name'] ?? 'Sem nome';
           _userImageBase64 = userDoc.data()?['photoBase64'] ?? '';
+          
         });
       }
     } catch (e) {
@@ -168,14 +169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                             MaterialPageRoute(
                                               builder:
                                                   (context) => DetailsPage(
-                                                    characterId:
-                                                        fav['id'] is int
-                                                            ? fav['id']
-                                                            : int.tryParse(
-                                                                  fav['id']
-                                                                      .toString(),
-                                                                ) ??
-                                                                0,
+                                                    characterId: fav['id'] as int,
                                                   ),
                                             ),
                                           );

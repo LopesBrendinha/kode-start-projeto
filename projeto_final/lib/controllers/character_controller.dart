@@ -48,27 +48,26 @@ class CharacterController {
   }
 
   Future<List<Map<String, dynamic>>> getUserCharacters() async {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) return [];
+    final snapshot =
+        await FirebaseFirestore.instance
+            .collection('characters')
+            .where('userId', isEqualTo: _auth.currentUser!.uid)
+            .get();
 
-      final querySnapshot =
-          await _charactersCollection
-              .where('userId', isEqualTo: user.uid)
-              .get();
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      return {
+        'id': _ensureInt(data['id']),
+        'name': data['name'] ?? 'Sem nome',
+        'image': data['imageUrl'] ?? '',
+      };
+    }).toList();
+  }
 
-      return querySnapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        return {
-          'id': doc.id,
-          'name': data['name']?.toString() ?? '',
-          'image': data['imageUrl']?.toString() ?? '',
-        };
-      }).toList();
-    } catch (e) {
-      print('Erro ao buscar personagens: $e');
-      throw Exception('Falha ao carregar personagens');
-    }
+  int _ensureInt(dynamic id) {
+    if (id is int) return id;
+    if (id is String) return int.tryParse(id) ?? 0;
+    return 0;
   }
 
   Future<DetailedCharacter> getCharacterById(String characterId) async {

@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/theme/app_images.dart';
 import 'package:sign_button/constants.dart';
@@ -41,44 +44,54 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<UserCredential?> signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+  try {
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    if (googleUser == null) return null;
 
-      if (googleUser == null) return null;
+    final GoogleSignInAuthentication googleAuth = 
+        await googleUser.authentication;
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+    final UserCredential userCredential = 
+        await FirebaseAuth.instance.signInWithCredential(credential);
 
-      final UserCredential userCredential = await FirebaseAuth.instance
-          .signInWithCredential(credential);
-
-      final user = userCredential.user;
-
-      if (user != null) {
-        await FirebaseFirestore.instance
-            .collection('usuarios')
-            .doc(user.uid)
-            .set({
-              'nome': user.displayName ?? '',
-              'email': user.email ?? '',
-              'foto': user.photoURL ?? '',
-              'createdAt': DateTime.now(),
-            });
-
-        Navigator.pushReplacementNamed(context, "/homePage");
+    final user = userCredential.user;
+    if (user != null) {
+      String? photoBase64;
+      if (user.photoURL != null) {
+        try {
+          final response = await http.get(Uri.parse(user.photoURL!));
+          if (response.statusCode == 200) {
+            photoBase64 = base64Encode(response.bodyBytes);
+          }
+        } catch (e) {
+          print("Erro ao converter foto: $e");
+        }
       }
 
-      return userCredential;
-    } catch (e) {
-      print("Erro no login com Google: $e");
-      return null;
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .set({
+            'nome': user.displayName ?? '',
+            'email': user.email ?? '',
+            'photoBase64': photoBase64 ?? '', 
+            'createdAt': DateTime.now(),
+          });
+
+      Navigator.pushReplacementNamed(context, "/homePage");
     }
+
+    return userCredential;
+  } catch (e) {
+    print("Erro no login com Google: $e");
+    return null;
   }
+}
 
   void _toggleObscure() {
     setState(() {
