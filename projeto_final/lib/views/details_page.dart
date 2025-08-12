@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:projeto_final/components/appbar_component.dart';
 import 'package:projeto_final/components/detailed_character_card_component.dart';
 import 'package:projeto_final/controllers/character_controller.dart';
-
 import 'package:projeto_final/controllers/rickandmorty_controller.dart';
 import 'package:projeto_final/models/detailed_character.dart';
 import 'package:projeto_final/theme/app_colors.dart';
@@ -30,6 +29,10 @@ class _DetailsPageState extends State<DetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkMode ? AppColors.backgroundColor : AppColors.lightBackgroundColor;
+    final textColor = isDarkMode ? AppColors.white : AppColors.lightBlack;
+
     return Scaffold(
       appBar: AppBarComponent(
         isHomePage: false,
@@ -41,7 +44,7 @@ class _DetailsPageState extends State<DetailsPage> {
         },
         isProfilePage: false,
       ),
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: backgroundColor,
       body: FutureBuilder<DetailedCharacter>(
         future: detailedCharacter,
         builder: (context, snapshot) {
@@ -51,12 +54,16 @@ class _DetailsPageState extends State<DetailsPage> {
               future: characterController.characterExists(character.id),
               builder: (context, favSnapshot) {
                 if (favSnapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(
+                    child: CircularProgressIndicator(
+                      color: isDarkMode ? AppColors.white : AppColors.primaryColorDark,
+                    ),
+                  );
                 } else if (favSnapshot.hasError) {
                   return Center(
                     child: Text(
                       'Erro ao verificar favorito',
-                      style: TextStyle(color: AppColors.white),
+                      style: TextStyle(color: textColor),
                     ),
                   );
                 } else {
@@ -84,11 +91,15 @@ class _DetailsPageState extends State<DetailsPage> {
             return Center(
               child: Text(
                 "Ocorreu um erro.",
-                style: TextStyle(color: AppColors.white),
+                style: TextStyle(color: textColor),
               ),
             );
           } else {
-            return const Center(child: CircularProgressIndicator());
+            return Center(
+              child: CircularProgressIndicator(
+                color: isDarkMode ? AppColors.white : AppColors.primaryColorDark,
+              ),
+            );
           }
         },
       ),

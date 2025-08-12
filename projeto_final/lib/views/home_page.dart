@@ -7,7 +7,6 @@ import 'package:projeto_final/models/detailed_character.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/theme/app_images.dart';
 import 'package:projeto_final/views/details_page.dart';
-import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,8 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final RickandmortyController rickandmortyController =
-      RickandmortyController();
+  final RickandmortyController rickandmortyController = RickandmortyController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
@@ -28,11 +26,10 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = false;
   bool _hasError = false;
   String _search = '';
-  String? _statusFilter = null;
-  String? _speciesFilter = null;
-  String? _typeFilter = null;
-  String? _genderFilter = null;
-
+  String? _statusFilter;
+  String? _speciesFilter;
+  String? _typeFilter;
+  String? _genderFilter;
 
   @override
   void initState() {
@@ -56,7 +53,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _loadCharacters() async {
+  Future<void> _loadCharacters() async {
     setState(() {
       _isLoading = true;
       _hasError = false;
@@ -65,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     try {
       List<DetailedCharacter> newCharacters;
 
-      if (_search != null ||
+      if (_search.isNotEmpty ||
           _speciesFilter != null ||
           _statusFilter != null ||
           _genderFilter != null ||
@@ -79,9 +76,7 @@ class _HomePageState extends State<HomePage> {
           page: _currentPage,
         );
       } else {
-        newCharacters = await rickandmortyController.fetchCharacters(
-          _currentPage,
-        );
+        newCharacters = await rickandmortyController.fetchCharacters(_currentPage);
       }
 
       setState(() {
@@ -127,22 +122,26 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkMode ? AppColors.backgroundColor : AppColors.lightBackgroundColor;
+    final appBarColor = isDarkMode ? AppColors.appBarColor : AppColors.white;
+    final textColor = isDarkMode ? AppColors.white : AppColors.black;
+    final primaryColor = isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight;
+
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBarComponent(
         isHomePage: true,
-        onTap: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
+        onTap: () => _scaffoldKey.currentState?.openDrawer(),
         onTap2: _refresh,
         isProfilePage: false,
       ),
-      backgroundColor: AppColors.backgroundColor,
-      drawer: NavigationDrawerComponent(),
+      backgroundColor: backgroundColor,
+      drawer: const NavigationDrawerComponent(),
       body: Column(
         children: [
           Container(
-            color: AppColors.appBarColor,
+            color: appBarColor,
             padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
@@ -153,22 +152,18 @@ class _HomePageState extends State<HomePage> {
                     decoration: InputDecoration(
                       labelText: "Search",
                       labelStyle: TextStyle(
-                        color: AppColors.white,
+                        color: textColor,
                         fontWeight: FontWeight.w400,
                         fontFamily: "Lato",
                       ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColorDark,
-                        ),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: AppColors.primaryColorLight,
-                        ),
+                        borderSide: BorderSide(color: primaryColor),
                       ),
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.search, color: AppColors.white),
+                        icon: Icon(Icons.search, color: textColor),
                         onPressed: () {
                           setState(() {
                             _search = _searchController.text;
@@ -180,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     style: TextStyle(
-                      color: AppColors.white,
+                      color: textColor,
                       fontSize: 18,
                       fontFamily: "Lato",
                     ),
@@ -194,66 +189,62 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 IconButton(
-                  icon: Icon(Icons.filter_alt, color: AppColors.white),
+                  icon: Icon(Icons.filter_alt, color: textColor),
                   onPressed: _showFilterDialog,
                 ),
               ],
             ),
           ),
           Expanded(
-            child:
-                _hasError
-                    ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            AppImages.erro404,
-                            width: 200,
-                            height: 200,
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            'We cant see to find in this dimension',
-                            style: TextStyle(color: AppColors.white),
-                          ),
-                        ],
-                      ),
-                    )
-                    : ListView.builder(
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(vertical: 7.5),
-                      itemCount: _characters.length + (_isLoading ? 1 : 0),
-                      itemBuilder: (context, index) {
-                        if (index < _characters.length) {
-                          final character = _characters[index];
-                          return CardCharacterComponent(
-                            characterName: character.name,
-                            characterImg: character.image,
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => DetailsPage(
-                                        characterId: character.id,
-                                      ),
-                                ),
-                              );
-                            },
-                          );
-                        } else {
-                          return const Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        }
-                      },
+            child: _hasError
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          AppImages.erro404,
+                          width: 200,
+                          height: 200,
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          'We can\'t seem to find in this dimension',
+                          style: TextStyle(color: textColor),
+                        ),
+                      ],
                     ),
+                  )
+                : ListView.builder(
+                    controller: _scrollController,
+                    padding: const EdgeInsets.symmetric(vertical: 7.5),
+                    itemCount: _characters.length + (_isLoading ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index < _characters.length) {
+                        final character = _characters[index];
+                        return CardCharacterComponent(
+                          characterName: character.name,
+                          characterImg: character.image,
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailsPage(
+                                characterId: character.id,
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: CircularProgressIndicator(color: primaryColor),
+                          ),
+                        );
+                      }
+                    },
+                  ),
           ),
         ],
       ),
@@ -261,16 +252,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _showFilterDialog() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final dialogColor = isDarkMode ? AppColors.appBarColor : AppColors.white;
+    final textColor = isDarkMode ? AppColors.white : AppColors.black;
+    final primaryColor = isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight;
+
     showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: AppColors.appBarColor,
+              backgroundColor: dialogColor,
               title: Text(
                 "Advanced Filters",
-                style: TextStyle(color: AppColors.white),
+                style: TextStyle(color: textColor),
               ),
               content: SingleChildScrollView(
                 child: Column(
@@ -280,35 +276,35 @@ class _HomePageState extends State<HomePage> {
                       value: _statusFilter,
                       items: ['Alive', 'Dead', 'Unknown'],
                       hint: 'Status',
+                      textColor: textColor,
+                      dialogColor: dialogColor,
                       onChanged: (value) => _statusFilter = value,
                     ),
-
+                    const SizedBox(height: 16),
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Species',
-                        labelStyle: TextStyle(color: AppColors.white),
+                        labelStyle: TextStyle(color: textColor),
                       ),
-                      style: TextStyle(color: AppColors.white),
-                      onChanged:
-                          (value) =>
-                              _speciesFilter = value.isNotEmpty ? value : null,
+                      style: TextStyle(color: textColor),
+                      onChanged: (value) => _speciesFilter = value.isNotEmpty ? value : null,
                     ),
-
+                    const SizedBox(height: 16),
                     TextField(
                       decoration: InputDecoration(
                         labelText: 'Type',
-                        labelStyle: TextStyle(color: AppColors.white),
+                        labelStyle: TextStyle(color: textColor),
                       ),
-                      style: TextStyle(color: AppColors.white),
-                      onChanged:
-                          (value) =>
-                              _typeFilter = value.isNotEmpty ? value : null,
+                      style: TextStyle(color: textColor),
+                      onChanged: (value) => _typeFilter = value.isNotEmpty ? value : null,
                     ),
-
+                    const SizedBox(height: 16),
                     _buildFilterDropdown(
                       value: _genderFilter,
                       items: ['Female', 'Male', 'Genderless', 'Unknown'],
                       hint: 'Gender',
+                      textColor: textColor,
+                      dialogColor: dialogColor,
                       onChanged: (value) => _genderFilter = value,
                     ),
                   ],
@@ -318,7 +314,7 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   child: Text(
                     'CLEAR',
-                    style: TextStyle(color: AppColors.primaryColorLight),
+                    style: TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
                     setState(() {
@@ -332,7 +328,7 @@ class _HomePageState extends State<HomePage> {
                 TextButton(
                   child: Text(
                     'APPLY',
-                    style: TextStyle(color: AppColors.primaryColorLight),
+                    style: TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
                     Navigator.pop(context);
@@ -351,25 +347,27 @@ class _HomePageState extends State<HomePage> {
     required String? value,
     required List<String> items,
     required String hint,
+    required Color textColor,
+    required Color dialogColor,
     required Function(String?) onChanged,
   }) {
     return DropdownButtonFormField<String>(
       value: value,
-      dropdownColor: AppColors.appBarColor,
+      dropdownColor: dialogColor,
       decoration: InputDecoration(
         labelText: hint,
-        labelStyle: TextStyle(color: AppColors.white),
+        labelStyle: TextStyle(color: textColor),
       ),
-      style: TextStyle(color: AppColors.white),
+      style: TextStyle(color: textColor),
       items: [
         DropdownMenuItem(
           value: null,
-          child: Text('Select $hint', style: TextStyle(color: AppColors.white)),
+          child: Text('Select $hint', style: TextStyle(color: textColor)),
         ),
         ...items.map(
           (item) => DropdownMenuItem(
             value: item,
-            child: Text(item, style: TextStyle(color: AppColors.white)),
+            child: Text(item, style: TextStyle(color: textColor)),
           ),
         ),
       ],

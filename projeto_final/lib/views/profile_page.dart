@@ -42,21 +42,19 @@ class _ProfilePageState extends State<ProfilePage> {
 
       _userEmail = _user!.email ?? '';
 
-      final userDoc =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(_user!.uid)
-              .get();
+      final userDoc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_user!.uid)
+          .get();
 
       if (userDoc.exists) {
         setState(() {
           _userName = userDoc.data()?['name'] ?? 'Sem nome';
           _userImageBase64 = userDoc.data()?['photoBase64'] ?? '';
-          
         });
       }
     } catch (e) {
-      print('Erro ao carregar dados do usuário: $e');
+      debugPrint('Erro ao carregar dados do usuário: $e');
     }
   }
 
@@ -68,13 +66,19 @@ class _ProfilePageState extends State<ProfilePage> {
         _isLoading = false;
       });
     } catch (e) {
-      print('Erro ao carregar favoritos: $e');
+      debugPrint('Erro ao carregar favoritos: $e');
       setState(() => _isLoading = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final backgroundColor = isDarkMode ? AppColors.backgroundColor : AppColors.lightBackgroundColor;
+    final headerColor = isDarkMode ? AppColors.appBarColor : AppColors.primaryColorLight;
+    final textColor = isDarkMode ? AppColors.white : AppColors.black;
+    final progressColor = isDarkMode ? AppColors.white : AppColors.primaryColorDark;
+
     return Scaffold(
       appBar: AppBarComponent(
         isHomePage: false,
@@ -82,113 +86,123 @@ class _ProfilePageState extends State<ProfilePage> {
         onTap2: () {},
         isProfilePage: true,
       ),
-      backgroundColor: AppColors.backgroundColor,
-      body:
-          _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: AppColors.appBarColor,
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          bottomRight: Radius.circular(20),
-                        ),
-                      ),
-                      child: Column(
-                        children: [
-                          _buildProfileImage(),
-                          const SizedBox(height: 16),
-                          Text(
-                            _userName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontFamily: "Lato",
-                              color: AppColors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            _userEmail,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Lato",
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ],
+      backgroundColor: backgroundColor,
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(color: progressColor),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: headerColor,
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       ),
                     ),
-                    const SizedBox(height: 24),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Meus Favoritos",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontFamily: "Lato",
-                              color: AppColors.white,
-                            ),
+                    child: Column(
+                      children: [
+                        _buildProfileImage(isDarkMode),
+                        const SizedBox(height: 16),
+                        Text(
+                          _userName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontFamily: "Lato",
+                            color: textColor,
+                            fontSize: 20,
                           ),
-                          const SizedBox(height: 16),
-                          _favorites.isEmpty
-                              ? Center(
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          _userEmail,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Lato",
+                            color: textColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Meus Favoritos",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            fontFamily: "Lato",
+                            color: textColor,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        _favorites.isEmpty
+                            ? Center(
                                 child: Text(
                                   "Nenhum favorito adicionado",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w900,
                                     fontFamily: "Lato",
-                                    color: AppColors.white,
+                                    color: textColor,
                                   ),
                                 ),
                               )
-                              : ExpansionTile(
+                            : ExpansionTile(
                                 title: Text(
                                   "Personagens Favoritos (${_favorites.length})",
                                   style: TextStyle(
-                                    color: AppColors.white,
+                                    color: textColor,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: "Lato",
                                   ),
                                 ),
-                                collapsedIconColor: AppColors.white,
-                                iconColor: AppColors.white,
-                                children:
-                                    _favorites.map((fav) {
-                                      return CardCharacterComponent(
-                                        characterName: fav['name'] ?? '',
-                                        characterImg: fav['image'] ?? '',
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) => DetailsPage(
-                                                    characterId: fav['id'] as int,
-                                                  ),
-                                            ),
-                                          );
-                                        },
+                                collapsedIconColor: textColor,
+                                iconColor: textColor,
+                                children: _favorites.map((fav) {
+                                  return CardCharacterComponent(
+                                    characterName: fav['name'] ?? '',
+                                    characterImg: fav['image'] ?? '',
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DetailsPage(
+                                            characterId: fav['id'] as int,
+                                          ),
+                                        ),
                                       );
-                                    }).toList(),
+                                    },
+                                  );
+                                }).toList(),
                               ),
-                        ],
-                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+            ),
     );
   }
 
-  Widget _buildProfileImage() {
+  Widget _buildProfileImage(bool isDarkMode) {
     if (_userImageBase64.isEmpty) {
-      return Icon(Icons.person, size: 50, color: AppColors.white);
+      return CircleAvatar(
+        radius: 50,
+        backgroundColor: isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight,
+        child: Icon(
+          Icons.person,
+          size: 50,
+          color: AppColors.white,
+        ),
+      );
     }
 
     try {
@@ -197,8 +211,16 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundImage: MemoryImage(base64Decode(_userImageBase64)),
       );
     } catch (e) {
-      print('Erro ao decodificar imagem: $e');
-      return Icon(Icons.error, size: 50, color: AppColors.white);
+      debugPrint('Erro ao decodificar imagem: $e');
+      return CircleAvatar(
+        radius: 50,
+        backgroundColor: isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight,
+        child: Icon(
+          Icons.error,
+          size: 50,
+          color: AppColors.white,
+        ),
+      );
     }
   }
 }
