@@ -104,8 +104,8 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 20),
                       Image.asset(
                         AppImages.logoSplash,
-                        height: 240 * 0.8,
-                        width: 290 * 0.8,
+                        height: 240,
+                        width: 290,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),

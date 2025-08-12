@@ -37,7 +37,10 @@ class _SignupPageState extends State<SignupPage> {
             debugPrint("Image picker error: $error");
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text("Failed to access gallery"),
+                content: const Text(
+                  "Failed to access gallery",
+                  style: TextStyle(fontFamily: "Lato"),
+                ),
                 backgroundColor: AppColors.red,
               ),
             );
@@ -53,7 +56,10 @@ class _SignupPageState extends State<SignupPage> {
       debugPrint("Unexpected error: $e");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text("An unexpected error occurred"),
+          content: const Text(
+            "An unexpected error occurred",
+            style: TextStyle(fontFamily: "Lato"),
+          ),
           backgroundColor: AppColors.red,
         ),
       );
@@ -64,7 +70,10 @@ class _SignupPageState extends State<SignupPage> {
     if (_name.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Name is required'),
+          content: Text(
+            'Name is required',
+            style: TextStyle(fontFamily: "Lato"),
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -74,7 +83,10 @@ class _SignupPageState extends State<SignupPage> {
     if (_email.text.isEmpty || !_email.text.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please enter a valid email'),
+          content: Text(
+            'Please enter a valid email',
+            style: TextStyle(fontFamily: "Lato"),
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -84,7 +96,10 @@ class _SignupPageState extends State<SignupPage> {
     if (_password.text.isEmpty || _password.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Password must be at least 6 characters'),
+          content: Text(
+            'Password must be at least 6 characters',
+            style: TextStyle(fontFamily: "Lato"),
+          ),
           backgroundColor: Colors.red,
         ),
       );
@@ -101,7 +116,10 @@ class _SignupPageState extends State<SignupPage> {
               children: [
                 CircularProgressIndicator(),
                 SizedBox(height: 20),
-                Text('Creating account...'),
+                Text(
+                  'Creating account...',
+                  style: TextStyle(fontFamily: "Lato"),
+                ),
               ],
             ),
           ),
@@ -124,7 +142,10 @@ class _SignupPageState extends State<SignupPage> {
         if (imageBytes.length > 500000) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text('Image is too large, please select a smaller one'),
+              content: const Text(
+                'Image is too large, please select a smaller one',
+                style: TextStyle(fontFamily: "Lato"),
+              ),
               backgroundColor: AppColors.gray,
             ),
           );
@@ -146,8 +167,14 @@ class _SignupPageState extends State<SignupPage> {
         context: context,
         builder:
             (context) => AlertDialog(
-              title: const Text('Registration Complete!'),
-              content: const Text('Your account has been created successfully'),
+              title: const Text(
+                'Registration Complete!',
+                style: TextStyle(fontFamily: "Lato"),
+              ),
+              content: const Text(
+                'Your account has been created successfully',
+                style: TextStyle(fontFamily: "Lato"),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -212,13 +239,15 @@ class _SignupPageState extends State<SignupPage> {
                 constraints: BoxConstraints(minHeight: constraints.maxHeight),
                 child: IntrinsicHeight(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment:
+                        MainAxisAlignment.start, 
                     children: [
-                      
+                      const SizedBox(height: 20),
                       Image.asset(
                         AppImages.logoSplash,
-                        height: 240 * 0.8,
-                        width: 290 * 0.8,
+                        height: 240,
+                        width: 290,
                       ),
                       const SizedBox(height: 20),
                       GestureDetector(
@@ -231,7 +260,7 @@ class _SignupPageState extends State<SignupPage> {
                                     base64Decode(
                                       base64Encode(
                                         _selectedImage!.readAsBytesSync(),
-                                      ), 
+                                      ),
                                     ),
                                   )
                                   : null,
