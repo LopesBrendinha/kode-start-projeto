@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+
 import 'package:projeto_final/controllers/rickandmorty_controller.dart';
-import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/models/detailed_character.dart';
+import 'package:projeto_final/theme/app_colors.dart';
 
 class DetailedCharacterCardComponent extends StatelessWidget {
-  DetailedCharacterCardComponent({required this.character, super.key});
-  final RickandmortyController controller = RickandmortyController();
   final DetailedCharacter character;
+  final bool isFavorite;
+  final Future<void> Function() onToggleFavorite;
 
-  
+  DetailedCharacterCardComponent({
+    super.key,
+    required this.character,
+    required this.isFavorite,
+    required this.onToggleFavorite,
+  });
+
+  final RickandmortyController controller = RickandmortyController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +34,7 @@ class DetailedCharacterCardComponent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 160), 
+                const SizedBox(height: 160),
                 Text(
                   character.name.toUpperCase(),
                   style: TextStyle(
@@ -37,9 +45,15 @@ class DetailedCharacterCardComponent extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 38),
-                _buildBulletAndInfo(character.status, character.species),
+                _buildBulletAndInfo(
+                  character.status,
+                  character.species,
+                ),
                 const SizedBox(height: 15),
-                _buildInfoRow('Last known location: ', character.location.name),
+                _buildInfoRow(
+                  'Last known location: ',
+                  character.location.name,
+                ),
                 const SizedBox(height: 15),
                 _buildEpisodeInfo(character.episode[0]),
                 const SizedBox(height: 15),
@@ -49,23 +63,33 @@ class DetailedCharacterCardComponent extends StatelessWidget {
               ],
             ),
           ),
+
           Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
-                ),
-                child: Image.network(
-                  character.image,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  height: 160,
-                ),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(10),
               ),
+              child: Image.network(
+                character.image,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                height: 160,
+              ),
+            ),
+          ),
+
+          Positioned(
+            top: 8,
+            right: 8,
+            child: IconButton(
+              icon: Icon(
+                isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: AppColors.white,
+              ),
+              onPressed: onToggleFavorite,
             ),
           ),
         ],
@@ -74,86 +98,86 @@ class DetailedCharacterCardComponent extends StatelessWidget {
   }
 
   Widget _buildBulletAndInfo(String status, String species) {
-    Color bulletColor;
-
-    bulletColor =
+    Color bulletColor =
         status == "Alive"
             ? AppColors.green
             : status == "Dead"
-            ? AppColors.red
-            : AppColors.gray;
+                ? AppColors.red
+                : AppColors.gray;
 
     return Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (bulletColor != Colors.transparent)
-            Container(
-              width: 8,
-              height: 8,
-              decoration: BoxDecoration(
-                color: bulletColor,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.white, width: 1),
-              ),
-              margin: const EdgeInsets.only(right: 8),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (bulletColor != Colors.transparent)
+          Container(
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: bulletColor,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.white, width: 1),
             ),
-          Expanded(
-            child: Text(
-              "$status - $species",
-              style: TextStyle(
-                color: AppColors.white,
-                fontWeight: FontWeight.w500,
-                fontFamily: "Lato",
-                fontSize: 12.5,
-                letterSpacing: 0,
-              ),
+            margin: const EdgeInsets.only(right: 8),
+          ),
+        Expanded(
+          child: Text(
+            "$status - $species",
+            style: TextStyle(
+              color: AppColors.white,
+              fontWeight: FontWeight.w500,
+              fontFamily: "Lato",
+              fontSize: 12.5,
+              letterSpacing: 0,
             ),
           ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 
   Widget _buildInfoRow(String label, String value) {
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '$label ',
-            style: TextStyle(
-              fontWeight: FontWeight.w300,
-              color: AppColors.white,
-              fontSize: 12.5,
-              fontFamily: "Lato",
-            ),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label',
+          style: TextStyle(
+            fontWeight: FontWeight.w300,
+            color: AppColors.white,
+            fontSize: 12.5,
+            fontFamily: "Lato",
           ),
-          SizedBox( height:  4,
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '$value',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: AppColors.white,
+            fontSize: 12.5,
+            fontFamily: "Lato",
           ),
-          Text(
-            '$value ',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: AppColors.white,
-              fontSize: 12.5,
-              fontFamily: "Lato",
-            ),
-          ),
-      
-        ],
+        ),
+      ],
     );
   }
+
   Widget _buildEpisodeInfo(String episodeUrl) {
     return FutureBuilder<Map<String, dynamic>>(
       future: controller.fetchEpisodeByUrl(episodeUrl),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(); 
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else if (snapshot.hasData) {
           final episodeData = snapshot.data!;
-          return _buildInfoRow('First seen in:', episodeData['name'] ?? 'Unknown');
+          return _buildInfoRow(
+            'First seen in:',
+            episodeData['name'] ?? 'Unknown',
+          );
         } else {
-          return Text('No data available');
+          return const Text('No data available');
         }
       },
     );

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:projeto_final/components/appbar_component.dart';
 import 'package:projeto_final/components/card_character_component.dart';
+import 'package:projeto_final/controllers/character_controller.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/views/details_page.dart';
 
@@ -16,7 +17,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final CharacterController _characterController = CharacterController();
 
   User? _user;
   String _userName = '';
@@ -29,47 +30,47 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _loadUserData();
+    _loadFavorites();
   }
 
   Future<void> _loadUserData() async {
-  setState(() => _isLoading = true);
+    setState(() => _isLoading = true);
 
-  try {
-    _user = _auth.currentUser;
+    try {
+      _user = _auth.currentUser;
+      if (_user == null) return;
 
-    if (_user != null) {
       _userEmail = _user!.email ?? '';
 
-      final userDoc = await _firestore.collection('users').doc(_user!.uid).get();
+      final userDoc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(_user!.uid)
+              .get();
+
       if (userDoc.exists) {
         setState(() {
           _userName = userDoc.data()?['name'] ?? 'Sem nome';
           _userImageBase64 = userDoc.data()?['photoBase64'] ?? '';
         });
       }
-
-      final favoritesSnapshot = await _firestore
-          .collection('users')
-          .doc(_user!.uid)
-          .collection('favorites')
-          .get();
-
-      setState(() {
-        _favorites = favoritesSnapshot.docs
-            .map((doc) => {
-                  'id': int.parse(doc.id), 
-                  'name': doc.data()['characterName'] as String,
-                  'image': doc.data()['characterImage'] as String,
-                })
-            .toList();
-      });
+    } catch (e) {
+      print('Erro ao carregar dados do usuário: $e');
     }
-  } catch (e) {
-    print('Erro ao carregar dados: $e');
-  } finally {
-    setState(() => _isLoading = false);
   }
-}
+
+  Future<void> _loadFavorites() async {
+    try {
+      final favorites = await _characterController.getUserCharacters();
+      setState(() {
+        _favorites = favorites;
+        _isLoading = false;
+      });
+    } catch (e) {
+      print('Erro ao carregar favoritos: $e');
+      setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,17 +147,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                               )
-                              : _favorites.isEmpty
-                              ? Center(
-                                child: Text(
-                                  "Nenhum favorito adicionado",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    fontFamily: "Lato",
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                              )
                               : ExpansionTile(
                                 title: Text(
                                   "Personagens Favoritos (${_favorites.length})",
@@ -170,17 +160,22 @@ class _ProfilePageState extends State<ProfilePage> {
                                 children:
                                     _favorites.map((fav) {
                                       return CardCharacterComponent(
-                                        characterName: fav['name'],
-                                        characterImg: fav['image'],
+                                        characterName: fav['name'] ?? '',
+                                        characterImg: fav['image'] ?? '',
                                         onTap: () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder:
                                                   (context) => DetailsPage(
-                                                    characterId: int.parse(
-                                                      fav['id'].toString(),
-                                                    ),
+                                                    characterId:
+                                                        fav['id'] is int
+                                                            ? fav['id']
+                                                            : int.tryParse(
+                                                                  fav['id']
+                                                                      .toString(),
+                                                                ) ??
+                                                                0,
                                                   ),
                                             ),
                                           );
@@ -199,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildProfileImage() {
     if (_userImageBase64.isEmpty) {
-      return const Icon(Icons.person, size: 50);
+      return Icon(Icons.person, size: 50, color: AppColors.white);
     }
 
     try {
@@ -209,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     } catch (e) {
       print('Erro ao decodificar imagem: $e');
-      return const Icon(Icons.error, size: 50);
+      return Icon(Icons.error, size: 50, color: AppColors.white);
     }
   }
 }

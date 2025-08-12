@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_final/components/appbar_component.dart';
 import 'package:projeto_final/components/detailed_character_card_component.dart';
+import 'package:projeto_final/controllers/character_controller.dart';
 
 import 'package:projeto_final/controllers/rickandmorty_controller.dart';
 import 'package:projeto_final/models/detailed_character.dart';
@@ -18,6 +19,7 @@ class DetailsPage extends StatefulWidget {
 class _DetailsPageState extends State<DetailsPage> {
   late Future<DetailedCharacter> detailedCharacter;
   final RickandmortyController controller = RickandmortyController();
+  final CharacterController characterController = CharacterController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -34,7 +36,7 @@ class _DetailsPageState extends State<DetailsPage> {
         onTap: () {
           _scaffoldKey.currentState?.openDrawer();
         },
-        onTap2: (){
+        onTap2: () {
           null;
         },
         isProfilePage: false,
@@ -44,10 +46,39 @@ class _DetailsPageState extends State<DetailsPage> {
         future: detailedCharacter,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return ListView(
-              children: [
-                DetailedCharacterCardComponent(character: snapshot.data!),
-              ],
+            final character = snapshot.data!;
+            return FutureBuilder<bool>(
+              future: characterController.characterExists(character.id),
+              builder: (context, favSnapshot) {
+                if (favSnapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (favSnapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      'Erro ao verificar favorito',
+                      style: TextStyle(color: AppColors.white),
+                    ),
+                  );
+                } else {
+                  final isFavorite = favSnapshot.data ?? false;
+                  return ListView(
+                    children: [
+                      DetailedCharacterCardComponent(
+                        character: character,
+                        isFavorite: isFavorite,
+                        onToggleFavorite: () async {
+                          if (isFavorite) {
+                            await characterController.deleteCharacter(character.id);
+                          } else {
+                            await characterController.addCharacter(character);
+                          }
+                          setState(() {}); 
+                        },
+                      ),
+                    ],
+                  );
+                }
+              },
             );
           } else if (snapshot.hasError) {
             return Center(
