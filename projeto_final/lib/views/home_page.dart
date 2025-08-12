@@ -5,7 +5,9 @@ import 'package:projeto_final/components/navigation_drawer_component.dart';
 import 'package:projeto_final/controllers/rickandmorty_controller.dart';
 import 'package:projeto_final/models/detailed_character.dart';
 import 'package:projeto_final/theme/app_colors.dart';
+import 'package:projeto_final/theme/app_images.dart';
 import 'package:projeto_final/views/details_page.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   String? _speciesFilter = null;
   String? _typeFilter = null;
   String? _genderFilter = null;
+  bool _is404Error = false;
 
   @override
   void initState() {
@@ -91,9 +94,19 @@ class _HomePageState extends State<HomePage> {
         _currentPage++;
       });
     } catch (e) {
+      bool is404 = false;
+      String errorMessage = 'Ocorreu um erro';
+
+      if (e is http.ClientException) {
+        is404 = e.message.contains('404');
+        errorMessage = e.message;
+      } else {
+        errorMessage = e.toString();
+      }
       setState(() {
         _hasError = true;
-        _errorMessage = e.toString();
+        _errorMessage = errorMessage;
+        _is404Error = is404;
       });
     } finally {
       setState(() {
@@ -204,9 +217,20 @@ class _HomePageState extends State<HomePage> {
             child:
                 _hasError
                     ? Center(
-                      child: Text(
-                        _errorMessage,
-                        style: TextStyle(color: AppColors.white),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            AppImages.erro404,
+                            width: 200,
+                            height: 200,
+                          ),
+                          SizedBox(height: 20),
+                          Text(
+                            'We cant see to find in this dimension',
+                            style: TextStyle(color: AppColors.white),
+                          ),
+                        ],
                       ),
                     )
                     : ListView.builder(
