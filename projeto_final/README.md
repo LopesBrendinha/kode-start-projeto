@@ -106,23 +106,36 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 
 ## 🧠 Decisões Técnicas e Justificativas
 
-### 🌐 Arquitetura - MVC (Model-View-Controller)
-Optei por utilizar o padrão **MVC** pela sua clareza na separação de responsabilidades e também foi o padrão que mais estudei:
+### 🌐 Arquitetura - MVC (Model-View-Controller)  
+Escolhi o padrão **MVC** por oferecer uma clara separação de responsabilidades entre as camadas de dados, interface e lógica de negócio. Essa estrutura facilita a organização do código, tornando-o mais modular e fácil de manter. Além disso, o MVC permite reutilização dos componentes e simplifica a realização de testes. Por ser um padrão que estudei profundamente e já apliquei em projetos anteriores, trouxe mais segurança e eficiência ao desenvolvimento.
 
-- **Model:** Responsável por representar os dados (ex: 'detailed_character.dart').
-- **View:** Interface com o usuário, implementada com `Widgets` declarativos.
-- **Controller:** Lógica de negócio e mediação entre model e view.
+### 📡 Requisições HTTP  
+Utilizei o pacote `http` por ser uma solução leve, simples e amplamente utilizada para comunicação REST em Flutter. A familiaridade adquirida durante a faculdade com essa biblioteca permitiu um desenvolvimento mais rápido e com menos complexidade, garantindo o consumo eficiente da API pública do Rick and Morty.
 
-Essa estrutura torna o código mais organizado, reutilizável e de fácil manutenção, assim facilitando testes, leitura e escalabilidade.
+### 🛠️ Gerenciamento de Estado  
+Optei por manter o gerenciamento de estado simples, utilizando `setState`, por conta da natureza do desafio e do escopo do projeto. Essa abordagem direta atende bem às necessidades da aplicação sem adicionar complexidade desnecessária. Também reflete o método que usei em meu TCC, o que contribui para uma implementação mais natural e consistente com meu conhecimento.
 
-### 📡 Requisições HTTP
-Utilizei o pacote `http` para realizar chamadas REST à API do Rick and Morty, por ser leve, simples e foi o método que estudei na faculdade, assim estava mais familiarizado com ele.
+### 📄 Organização do Projeto  
+A divisão em pastas seguindo o padrão MVC foi pensada para facilitar a escalabilidade, manutenção e compreensão do projeto. Essa organização deixa o código mais limpo, favorece o trabalho em equipe e permite a extensão do app com novas funcionalidades sem grandes retrabalhos.
 
-### 🛠️ Gerenciamento de Estado
-O estado foi mantido simples (com `setState`) devido à natureza do desafio, que prioriza boas práticas fundamentais. Essa abordagem também foi utilizada no meu TCC, o que torna mais natural e eficiente para eu aplicá-la neste projeto.
+### ⚡ Pacotes e Dependências  
 
-### 📄 Organização do Projeto
-O projeto foi dividido em pastas conforme o padrão MVC:
+#### Firebase  
+- Usei o conjunto de pacotes do Firebase (`firebase_core`, `firebase_auth`, `cloud_firestore`, `firebase_storage`, `google_sign_in`) para implementar autenticação, armazenamento e banco de dados em nuvem. Essa escolha garantiu uma infraestrutura robusta e escalável, facilitando a gestão dos usuários e seus dados, além de permitir login social e armazenamento seguro de fotos.
+
+#### API e HTTP  
+- O pacote `http` foi utilizado para realizar as requisições REST à API do Rick and Morty. É uma biblioteca simples e eficiente, ideal para o consumo da API pública com tratamento adequado de respostas.
+
+#### UI e Componentes  
+- `provider`: Escolhido para o gerenciamento de estado reativo e simples, permitindo atualização de UI a partir das mudanças nos dados.  
+- `flutter_translate`: Implementa a internacionalização, possibilitando troca dinâmica de idiomas, ampliando o alcance e acessibilidade do app.  
+- `flutter_multi_select_items`: Facilita a criação de filtros avançados com seleção múltipla, aprimorando a experiência do usuário na busca por personagens.  
+- `sign_button`: Simplifica a implementação dos botões de login social, garantindo aparência padronizada e funcionalidade integrada.  
+- `image_picker`: Permite que usuários selecionem imagens para perfil diretamente da galeria, melhorando a personalização do app.  
+- `introduction_screen`: Facilita a criação das telas de onboarding, oferecendo uma experiência inicial intuitiva e visualmente atraente.
+
+Essa combinação de pacotes foi selecionada cuidadosamente para equilibrar funcionalidade, simplicidade e performance, além de promover um desenvolvimento eficiente e sustentável.
+
 
 <pre style="background:#f5f5f5; padding:10px; border-radius:5px; font-family: monospace;">
 projeto_final/
@@ -291,12 +304,48 @@ Busquei garantir uma **entrega completa e bem documentada**, conforme orientaç�
 
 ## 🔧 Tecnologias Utilizadas
 
-- **Flutter** 3.x
-- **Dart**
-- **API REST** pública [Rick and Morty API](https://rickandmortyapi.com/)
-- **http** package
-- **MVC** como padrão arquitetural
+- **Flutter** 3.29.3 (stable)  
+  Framework baseado em [Flutter GitHub](https://github.com/flutter/flutter.git)  
+  Revision: ea121f8859 (4 meses atrás - 2025-04-11)  
+  Engine revision: cf56914b32  
+  Dart 3.7.2 • DevTools 2.42.3
 
+- **Dart** (versão 3.7.2)
+
+- **API REST** pública [Rick and Morty API](https://rickandmortyapi.com/)
+
+- **http** package (para consumo da API)
+
+- **MVC** como padrão arquitetural para organização do código
+
+
+---
+## 🚀 Como Exportar / Gerar o Build do Projeto
+
+Se desejar gerar o arquivo instalável do aplicativo para Android ou iOS, siga as instruções abaixo.
+
+### 📱 Android (APK)
+
+1. Certifique-se que o ambiente Android está configurado, com Android SDK e dispositivo/emulador pronto para testes.  
+2. No terminal, na raiz do projeto, rode os comandos:  
+   ```bash
+   flutter clean
+   flutter build apk --release
+3. O APK será gerado em:
+build/app/outputs/flutter-apk/app-release.apk
+
+4. Instale o APK diretamente no dispositivo ou distribua conforme necessário.
+
+🍏 iOS (IPA)
+1. Necessário ter um Mac com Xcode e certificados válidos para assinatura.
+
+2. No terminal, rode:
+
+flutter clean
+flutter build ios --release
+
+3. Abra ios/Runner.xcworkspace no Xcode, configure assinatura (Signing & Capabilities) e selecione dispositivo.
+4. No Xcode, faça Product > Archive, e no Organizer exporte o arquivo IPA para distribuição ou App Store
 ---
 
 ## 📌 Observações Finais
