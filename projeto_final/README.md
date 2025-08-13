@@ -44,14 +44,14 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - A splash screen tem duração controlada para garantir carregamento suave dos recursos.
 - Essa funcionalidade contribui para uma experiência de usuário mais fluida e agradável desde o início.
 
-![Tela de Splash](../Imgs&Gifs/SplashScreen.gif)
+![Tela de Splash](../Imgs&Gifs/SplashScreen1.gif)
 
 #### 🔍 Busca por Nome
 - Permite pesquisar personagens digitando o nome completo ou apenas parte dele.
 - O sistema retorna resultados em tempo real, facilitando a localização do personagem desejado.
 - A busca é sensível a trechos do nome, tornando a experiência mais prática e eficiente.
 
-![Pesquisa](../Imgs&Gifs/Navegacao.gif)
+![Pesquisa](../Imgs&Gifs/Pesquisa.gif)
 
 
 #### 🗂️ Filtro Avançado de Personagens
@@ -71,7 +71,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - Utiliza indicadores visuais para mostrar o progresso da navegação pelas páginas.
 - Após finalizar a introdução, o usuário é redirecionado automaticamente para a tela de login, iniciando a experiência principal do app.
 
-![IntroPages](../Imgs&Gifs/IntroPages.gif)
+![IntroPages](../Imgs&Gifs/IntroScreen1.gif)
 
 #### 🔐 Tela de Login e Cadastro
 
@@ -89,7 +89,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 
 - **NavigationDrawerComponent:** O menu lateral é um componente personalizado que oferece navegação rápida e organizada. Exibe foto e email do usuário (carregados do Firestore), controles para alternar tema e idioma, além de botão para logout integrado ao Firebase Auth. Utiliza `Provider` para gerenciamento reativo do estado e adapta o visual conforme o tema ativo, garantindo usabilidade e manutenção facilitadas.
 
-![NavigationDrawer](../Imgs&Gifs/Theme&language.gif)
+![NavigationDrawer](../Imgs&Gifs/Theme&language1.gif)
 
 #### 👤 Tela de Perfil e Favoritos
 
@@ -99,7 +99,7 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 - Ao favoritar um personagem, ele é salvo no Firestore associado ao usuário autenticado. Na tela de perfil, esses personagens favoritos aparecem organizados em uma lista expansível, permitindo que o usuário visualize rapidamente seus favoritos e acesse os detalhes com facilidade.  
 - Essa funcionalidade oferece uma experiência personalizada e mantém o usuário engajado com seus personagens preferidos.
 
-![NavigationDrawer](../Imgs&Gifs/TelaPerfil.gif)
+![NavigationDrawer](../Imgs&Gifs/TelaPerfil1.gif)
 
 
 ---
