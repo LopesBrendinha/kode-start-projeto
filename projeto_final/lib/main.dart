@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'RICK AND MORTY API',
-      initialRoute: "/splashsPage", 
+      initialRoute: "/splashPage", 
       routes: {
         "/homePage": (context) => HomePage(),
         "/loginPage": (context) => LoginPage(),
