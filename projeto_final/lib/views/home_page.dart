@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:projeto_final/components/appbar_component.dart';
 import 'package:projeto_final/components/card_character_component.dart';
 import 'package:projeto_final/components/navigation_drawer_component.dart';
@@ -76,7 +77,9 @@ class _HomePageState extends State<HomePage> {
           page: _currentPage,
         );
       } else {
-        newCharacters = await rickandmortyController.fetchCharacters(_currentPage);
+        newCharacters = await rickandmortyController.fetchCharacters(
+          _currentPage,
+        );
       }
 
       setState(() {
@@ -123,10 +126,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    final backgroundColor = isDarkMode ? AppColors.backgroundColor : AppColors.lightBackgroundColor;
+    final backgroundColor =
+        isDarkMode ? AppColors.backgroundColor : AppColors.lightBackgroundColor;
     final appBarColor = isDarkMode ? AppColors.appBarColor : AppColors.white;
     final textColor = isDarkMode ? AppColors.white : AppColors.black;
-    final primaryColor = isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight;
+    final primaryColor =
+        isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight;
 
     return Scaffold(
       key: _scaffoldKey,
@@ -150,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                   child: TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      labelText: "Search",
+                      labelText: translate('Search'),
                       labelStyle: TextStyle(
                         color: textColor,
                         fontWeight: FontWeight.w400,
@@ -210,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 20),
                         Text(
-                          'We can\'t seem to find in this dimension',
+                          translate('We cant seem to find in this dimension'),
                           style: TextStyle(color: textColor),
                         ),
                       ],
@@ -239,7 +244,9 @@ class _HomePageState extends State<HomePage> {
                         return Center(
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: CircularProgressIndicator(color: primaryColor),
+                            child: CircularProgressIndicator(
+                              color: primaryColor,
+                            ),
                           ),
                         );
                       }
@@ -255,7 +262,8 @@ class _HomePageState extends State<HomePage> {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final dialogColor = isDarkMode ? AppColors.appBarColor : AppColors.white;
     final textColor = isDarkMode ? AppColors.white : AppColors.black;
-    final primaryColor = isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight;
+    final primaryColor =
+        isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight;
 
     showDialog(
       context: context,
@@ -265,7 +273,7 @@ class _HomePageState extends State<HomePage> {
             return AlertDialog(
               backgroundColor: dialogColor,
               title: Text(
-                "Advanced Filters",
+                translate("Advanced Filters"),
                 style: TextStyle(color: textColor),
               ),
               content: SingleChildScrollView(
@@ -274,7 +282,11 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     _buildFilterDropdown(
                       value: _statusFilter,
-                      items: ['Alive', 'Dead', 'Unknown'],
+                      items: [
+                        translate('Alive'),
+                        translate('Dead'),
+                        translate('Unknown'),
+                      ],
                       hint: 'Status',
                       textColor: textColor,
                       dialogColor: dialogColor,
@@ -283,26 +295,33 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 16),
                     TextField(
                       decoration: InputDecoration(
-                        labelText: 'Species',
+                        labelText: translate('Species'),
                         labelStyle: TextStyle(color: textColor),
                       ),
                       style: TextStyle(color: textColor),
-                      onChanged: (value) => _speciesFilter = value.isNotEmpty ? value : null,
+                      onChanged:
+                          (value) => _speciesFilter = value.isNotEmpty ? value : null,
                     ),
                     const SizedBox(height: 16),
                     TextField(
                       decoration: InputDecoration(
-                        labelText: 'Type',
+                        labelText: translate('Type'),
                         labelStyle: TextStyle(color: textColor),
                       ),
                       style: TextStyle(color: textColor),
-                      onChanged: (value) => _typeFilter = value.isNotEmpty ? value : null,
+                      onChanged:
+                          (value) => _typeFilter = value.isNotEmpty ? value : null,
                     ),
                     const SizedBox(height: 16),
                     _buildFilterDropdown(
                       value: _genderFilter,
-                      items: ['Female', 'Male', 'Genderless', 'Unknown'],
-                      hint: 'Gender',
+                      items: [
+                        translate('Female'),
+                        translate('Male'),
+                        translate('Genderless'),
+                        translate('Unknown'),
+                      ],
+                      hint: translate('Gender'),
                       textColor: textColor,
                       dialogColor: dialogColor,
                       onChanged: (value) => _genderFilter = value,
@@ -313,7 +332,7 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 TextButton(
                   child: Text(
-                    'CLEAR',
+                    translate('CLEAR'),
                     style: TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
@@ -327,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 TextButton(
                   child: Text(
-                    'APPLY',
+                    translate('APPLY'),
                     style: TextStyle(color: primaryColor),
                   ),
                   onPressed: () {
@@ -362,7 +381,10 @@ class _HomePageState extends State<HomePage> {
       items: [
         DropdownMenuItem(
           value: null,
-          child: Text('Select $hint', style: TextStyle(color: textColor)),
+          child: Text(
+            translate('select_hint', args: {'hint': translate(hint)}),
+            style: TextStyle(color: textColor),
+          ),
         ),
         ...items.map(
           (item) => DropdownMenuItem(

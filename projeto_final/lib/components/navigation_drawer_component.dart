@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:projeto_final/controllers/theme_controller.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:provider/provider.dart';
@@ -59,7 +60,7 @@ class NavigationDrawerComponent extends StatelessWidget {
               _buildProfileImage(userImageBase64),
               const SizedBox(height: 10),
               Text(
-                'Menu',
+                translate('Menu'),
                 style: TextStyle(
                   color: AppColors.white,
                   fontSize: 20,
@@ -72,7 +73,7 @@ class NavigationDrawerComponent extends StatelessWidget {
                 Text(
                   user!.email!,
                   style: TextStyle(
-                    color: AppColors.white.withOpacity(0.8),
+                    color: AppColors.white,
                     fontSize: 14,
                     fontFamily: "Lato",
                   ),
@@ -125,8 +126,8 @@ class NavigationDrawerComponent extends StatelessWidget {
           ),
           title: Text(
             context.watch<ThemeController>().isDarkMode
-                ? 'Tema Escuro'
-                : 'Tema Claro',
+                ? translate('Dark Theme')
+                : translate('Light Theme'),
             style: TextStyle(
               color: Theme.of(context).textTheme.bodyMedium?.color,
               fontFamily: "Lato",
@@ -142,25 +143,44 @@ class NavigationDrawerComponent extends StatelessWidget {
           ),
         ),
         ListTile(
-          leading: Icon(Icons.settings, color: iconColor),
+          leading: Icon(Icons.language, color: iconColor),
           title: Text(
-            'Configurações',
+            translate(
+              'language',
+            ), 
             style: TextStyle(
               color: textColor,
               fontFamily: "Lato",
               fontSize: 16,
             ),
           ),
-          onTap: () {
-            Navigator.pop(context);
-            Navigator.pushNamed(context, "/settingsPage");
-          },
+          trailing: DropdownButton<String>(
+            underline: const SizedBox(),
+            icon: const Icon(Icons.arrow_drop_down),
+            value: LocalizedApp.of(context).delegate.currentLocale.languageCode,
+            items: [
+              DropdownMenuItem(
+                value: 'pt',
+                child: Text('Português', style: TextStyle(color: textColor)),
+              ),
+              DropdownMenuItem(
+                value: 'en',
+                child: Text('English', style: TextStyle(color: textColor)),
+              ),
+            ],
+            onChanged: (value) async {
+              if (value != null) {
+                Navigator.pop(context);
+                await changeLocale(context, value == 'pt' ? 'pt_BR' : 'en_US');
+              }
+            },
+          ),
         ),
         Divider(color: isDarkMode ? AppColors.gray : AppColors.lightGray),
         ListTile(
           leading: Icon(Icons.logout, color: AppColors.red),
           title: Text(
-            'Sair',
+            translate('Exit'),
             style: TextStyle(
               color: AppColors.red,
               fontFamily: "Lato",

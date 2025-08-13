@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:projeto_final/controllers/rickandmorty_controller.dart';
 import 'package:projeto_final/models/detailed_character.dart';
 import 'package:projeto_final/theme/app_colors.dart';
@@ -55,16 +56,16 @@ class DetailedCharacterCardComponent extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 _buildInfoRow(
-                  'Last known location: ',
+                  translate("Last known location: "),
                   character.location.name,
                   isDarkMode,
                 ),
                 const SizedBox(height: 15),
                 _buildEpisodeInfo(character.episode[0], isDarkMode),
                 const SizedBox(height: 15),
-                _buildInfoRow('Origin:', character.origin.name, isDarkMode),
+                _buildInfoRow(translate('Origin: '), character.origin.name, isDarkMode),
                 const SizedBox(height: 15),
-                _buildInfoRow('Gender:', character.gender, isDarkMode),
+                _buildInfoRow(translate('Gender: '), character.gender, isDarkMode),
               ],
             ),
           ),
@@ -186,13 +187,13 @@ class DetailedCharacterCardComponent extends StatelessWidget {
         } else if (snapshot.hasData) {
           final episodeData = snapshot.data!;
           return _buildInfoRow(
-            'First seen in:',
-            episodeData['name'] ?? 'Unknown',
+            translate('First seen in: '),
+            episodeData['name'] ?? translate('Unknown'),
             isDarkMode,
           );
         } else {
           return Text(
-            'No data available',
+            translate('No data available'),
             style: TextStyle(color: AppColors.getTextColor(isDarkMode)),
           );
         }

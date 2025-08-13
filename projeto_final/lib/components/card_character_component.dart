@@ -65,7 +65,7 @@ class CardCharacterComponent extends StatelessWidget {
               child: Text(
                 characterName.toUpperCase(),
                 style: TextStyle(
-                  color: AppColors.getTextColor(isDarkMode), // Cor fixa do texto
+                  color: AppColors.getTextColor(isDarkMode), 
                   fontWeight: FontWeight.w900,
                   fontSize: 14.5,
                 ),

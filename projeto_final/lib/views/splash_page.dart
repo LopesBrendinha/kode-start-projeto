@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/theme/app_images.dart';
 import 'package:projeto_final/views/intro_pages.dart';
@@ -32,7 +33,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
 
   @override
   void dispose() {
-    _controller.dispose(); 
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,7 +49,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
             Image.asset(AppImages.logoSplash),
             const SizedBox(height: 20),
             Text( 
-              "Ajustando coordenadas planetárias e\nPegando um picles...",
+              translate('splash.loading_message'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColors.white,

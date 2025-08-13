@@ -1,0 +1,104 @@
+{
+    "RICK AND MORTY API": "RICK AND MORTY API",
+    "Last known location: ": "Última localização conhecida: ",
+    "Origin: ": "Origem: ",
+    "Gender: ": "Gênero: ",
+    "First seen in: ": "Visto pela primeira vez em: ",
+    "Unknown": "Desconhecido",
+    "No data available": "Nenhum dado disponível",
+    "Menu": "Menu",
+    "Dark Theme": "Tema Escuro",
+    "Light Theme": "Tema Claro",
+    "Exit": "Sair",
+    "language": "Idioma",
+    "Error checking favorite": "Erro ao verificar favorito",
+    "An error occurred.": "Ocorreu um erro.",
+    "Search": "Pesquisar",
+    "We cant seem to find in this dimension": "Não conseguimos encontrar nesta dimensão",
+    "Advanced Filters": "Filtros Avançados",
+    "Alive": "Vivo",
+    "Dead": "Morto",
+    "Species": "Espécie",
+    "Type": "Tipo",
+    "Female": "Feminino",
+    "Male": "Masculino",
+    "Genderless": "Sem gênero",
+    "CLEAR": "LIMPAR",
+    "APPLY ": "APLICAR",
+    "select_hint": "Selecionar {{hint}}",
+    "intro": {
+        "page1": {
+            "title": "Bem-vindo ao Universo de Rick e Morty",
+            "body": "Explore cada canto do multiverso e descubra informações incríveis sobre seus personagens favoritos."
+        },
+        "page2": {
+            "title": "Descubra Personagens e Episódios",
+            "body": "Pesquise, filtre e aprenda curiosidades sobre cada personagem e episódio da série."
+        },
+        "page3": {
+            "title": "Salve Seus Favoritos",
+            "body": "Mantenha seus personagens e episódios favoritos à mão para revisitar quando quiser."
+        },
+        "page4": {
+            "title": "Prepare-se para Aventuras Épicas",
+            "body": "Viaje através de dimensões e explore tudo que a API oficial de Rick e Morty tem a oferecer."
+        },
+        "skip": "Pular",
+        "done": "Começar"
+    },
+    "login": {
+        "email_label": "E-mail",
+        "password_label": "Senha",
+        "login_button": "Entrar",
+        "signup_button": "Cadastrar",
+        "social_divider": "Ou através de redes sociais",
+        "errors": {
+            "user_not_found": "Usuário não encontrado.",
+            "wrong_password": "Senha incorreta.",
+            "generic": "Erro no login",
+            "photo_conversion": "Erro ao converter foto",
+            "google_signin": "Erro no login com Google"
+        }
+    },
+    "profile": {
+        "no_name": "Sem nome",
+        "favorites_title": "Meus Favoritos",
+        "no_favorites": "Nenhum favorito adicionado",
+        "favorite_characters": "Personagens Favoritos ({{count}})",
+        "errors": {
+            "load_user": "Erro ao carregar dados do usuário",
+            "load_favorites": "Erro ao carregar favoritos",
+            "image_decode": "Erro ao decodificar imagem"
+        }
+    },
+    "signup": {
+        "name_label": "Nome",
+        "email_label": "E-mail",
+        "password_label": "Senha",
+        "signup_button": "Cadastrar",
+        "creating_account": "Criando conta...",
+        "success": {
+            "title": "Cadastro Concluído!",
+            "message": "Sua conta foi criada com sucesso",
+            "ok_button": "OK"
+        },
+        "errors": {
+            "name_required": "Nome é obrigatório",
+            "valid_email": "Por favor insira um e-mail válido",
+            "password_length": "A senha deve ter pelo menos 6 caracteres",
+            "weak_password": "A senha é muito fraca",
+            "email_in_use": "E-mail já em uso",
+            "invalid_email": "Formato de e-mail inválido",
+            "registration_failed": "Falha no cadastro",
+            "generic": "Ocorreu um erro",
+            "image_picker": "Erro ao selecionar imagem",
+            "gallery_access": "Falha ao acessar a galeria",
+            "unexpected": "Erro inesperado",
+            "unexpected_message": "Ocorreu um erro inesperado",
+            "image_too_large": "Imagem muito grande, por favor selecione uma menor"
+        }
+    },
+    "splash": {
+        "loading_message": "Ajustando coordenadas planetárias e\nPegando um picles..."
+    }
+}

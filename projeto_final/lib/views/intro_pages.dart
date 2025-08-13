@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/theme/app_images.dart';
@@ -12,7 +13,6 @@ class IntroPages extends StatefulWidget {
 
 class _IntroPagesState extends State<IntroPages> {
   final _introKey = GlobalKey<IntroductionScreenState>();
-  String _status = 'Waiting...';
 
   @override
   Widget build(BuildContext context) {
@@ -21,116 +21,54 @@ class _IntroPagesState extends State<IntroPages> {
       key: _introKey,
       pages: [
         PageViewModel(
-          title: "Welcome to the Rick and Morty Universe",
-          body:
-              "Explore every corner of the multiverse and discover amazing info about your favorite characters.",
+          title: translate('intro.page1.title'),
+          body: translate('intro.page1.body'),
           image: Image.asset(
             AppImages.intro1,
             height: 250,
             fit: BoxFit.contain,
           ),
-          decoration: PageDecoration(
-            titleTextStyle: TextStyle(
-              color: AppColors.primaryColorLight,
-              fontFamily: "Lato",
-              fontWeight: FontWeight.w900,
-              fontSize: 25,
-            ),
-            bodyTextStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20.0,
-              fontFamily: "Lato",
-              color: AppColors.white,
-            ),
-          ),
+          decoration: _pageDecoration(),
         ),
-
         PageViewModel(
-          title: "Discover Characters and Episodes",
-          body:
-              "Search, filter, and learn fun facts about each character and episode from the show.",
+          title: translate('intro.page2.title'),
+          body: translate('intro.page2.body'),
           image: Image.asset(
             AppImages.intro2,
             height: 250,
             fit: BoxFit.contain,
           ),
-          decoration: PageDecoration(
-            titleTextStyle: TextStyle(
-              color: AppColors.primaryColorLight,
-              fontFamily: "Lato",
-              fontWeight: FontWeight.w900,
-              fontSize: 25,
-            ),
-            bodyTextStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20.0,
-              fontFamily: "Lato",
-              color: AppColors.white,
-            ),
-          ),
+          decoration: _pageDecoration(),
         ),
-
         PageViewModel(
-          title: "Save Your Favorites",
-          body:
-              "Keep your favorite characters and episodes handy to revisit anytime.",
+          title: translate('intro.page3.title'),
+          body: translate('intro.page3.body'),
           image: Image.asset(
             AppImages.intro3,
             height: 250,
             fit: BoxFit.contain,
           ),
-          decoration: PageDecoration(
-            titleTextStyle: TextStyle(
-              color: AppColors.primaryColorLight,
-              fontFamily: "Lato",
-              fontWeight: FontWeight.w900,
-              fontSize: 25,
-            ),
-            bodyTextStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20.0,
-              fontFamily: "Lato",
-              color: AppColors.white,
-            ),
-          ),
+          decoration: _pageDecoration(),
         ),
-
         PageViewModel(
-          title: "Get Ready for Epic Adventures",
-          body:
-              "Travel across dimensions and explore everything the official Rick and Morty API has to offer.",
+          title: translate('intro.page4.title'),
+          body: translate('intro.page4.body'),
           image: Image.asset(
             AppImages.intro4,
             height: 250,
             fit: BoxFit.contain,
           ),
-          decoration: PageDecoration(
-            titleTextStyle: TextStyle(
-              color: AppColors.primaryColorLight,
-              fontFamily: "Lato",
-              fontWeight: FontWeight.w900,
-              fontSize: 25,
-            ),
-            bodyTextStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 20.0,
-              fontFamily: "Lato",
-              color: AppColors.white,
-            ),
-          ),
+          decoration: _pageDecoration(),
         ),
       ],
       showSkipButton: true,
-      skip: const Text("Skip", style: TextStyle(fontWeight: FontWeight.w600)),
+      skip: Text(translate('intro.skip'), style: const TextStyle(fontWeight: FontWeight.w600)),
       next: const Icon(Icons.arrow_forward),
-      done: const Text(
-        "Get Started",
-        style: TextStyle(fontWeight: FontWeight.w600),
+      done: Text(
+        translate('intro.done'),
+        style: const TextStyle(fontWeight: FontWeight.w600),
       ),
-      onDone:
-          () {
-            Navigator.pushReplacementNamed(context, "/loginPage");
-          },
+      onDone: () => Navigator.pushReplacementNamed(context, "/loginPage"),
       dotsDecorator: DotsDecorator(
         size: const Size(10.0, 10.0),
         color: AppColors.gray,
@@ -139,6 +77,23 @@ class _IntroPagesState extends State<IntroPages> {
         activeShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),
+      ),
+    );
+  }
+
+  PageDecoration _pageDecoration() {
+    return PageDecoration(
+      titleTextStyle: TextStyle(
+        color: AppColors.primaryColorLight,
+        fontFamily: "Lato",
+        fontWeight: FontWeight.w900,
+        fontSize: 25,
+      ),
+      bodyTextStyle: TextStyle(
+        fontWeight: FontWeight.w500,
+        fontSize: 20.0,
+        fontFamily: "Lato",
+        color: AppColors.white,
       ),
     );
   }

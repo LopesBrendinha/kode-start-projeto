@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:projeto_final/theme/app_images.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 
@@ -74,7 +75,7 @@ class AppBarComponent extends StatelessWidget implements PreferredSizeWidget {
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(
-                "RICK AND MORTY API",
+                translate("RICK AND MORTY API"),
                 style: TextStyle(
                   color: AppColors.getTextColor(isDarkMode),
                   fontSize: 14.5,

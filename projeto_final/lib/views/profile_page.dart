@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:projeto_final/components/appbar_component.dart';
 import 'package:projeto_final/components/card_character_component.dart';
 import 'package:projeto_final/controllers/character_controller.dart';
@@ -49,12 +50,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
       if (userDoc.exists) {
         setState(() {
-          _userName = userDoc.data()?['name'] ?? 'Sem nome';
+          _userName = userDoc.data()?['name'] ?? translate('profile.no_name');
           _userImageBase64 = userDoc.data()?['photoBase64'] ?? '';
         });
       }
     } catch (e) {
-      debugPrint('Erro ao carregar dados do usuário: $e');
+      debugPrint('${translate('profile.errors.load_user')}: $e');
     }
   }
 
@@ -66,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _isLoading = false;
       });
     } catch (e) {
-      debugPrint('Erro ao carregar favoritos: $e');
+      debugPrint('${translate('profile.errors.load_favorites')}: $e');
       setState(() => _isLoading = false);
     }
   }
@@ -135,7 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Meus Favoritos",
+                          translate('profile.favorites_title'),
                           style: TextStyle(
                             fontWeight: FontWeight.w900,
                             fontFamily: "Lato",
@@ -147,7 +148,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         _favorites.isEmpty
                             ? Center(
                                 child: Text(
-                                  "Nenhum favorito adicionado",
+                                  translate('profile.no_favorites'),
                                   style: TextStyle(
                                     fontWeight: FontWeight.w900,
                                     fontFamily: "Lato",
@@ -157,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               )
                             : ExpansionTile(
                                 title: Text(
-                                  "Personagens Favoritos (${_favorites.length})",
+                                  translate('profile.favorite_characters', args: {'count': _favorites.length}),
                                   style: TextStyle(
                                     color: textColor,
                                     fontWeight: FontWeight.bold,
@@ -211,7 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundImage: MemoryImage(base64Decode(_userImageBase64)),
       );
     } catch (e) {
-      debugPrint('Erro ao decodificar imagem: $e');
+      debugPrint('${translate('profile.errors.image_decode')}: $e');
       return CircleAvatar(
         radius: 50,
         backgroundColor: isDarkMode ? AppColors.primaryColorDark : AppColors.primaryColorLight,

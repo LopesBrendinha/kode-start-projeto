@@ -30,23 +30,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # Firebase
   firebase_core: ^2.32.0
   firebase_auth: ^4.17.4
   cloud_firestore: ^4.13.5
   firebase_storage: ^11.0.0
-  
+  google_sign_in: ^6.1.5
+
   # API e HTTP
   http: ^1.4.0
   
   # UI e componentes
   provider: ^6.1.2
+  flutter_translate: ^4.0.0 
   flutter_multi_select_items: ^0.4.3
   sign_button: ^2.0.6
   image_picker: ^1.0.4
   introduction_screen: ^3.1.17
-  google_sign_in: ^6.1.5
+  
 
 dev_dependencies:
   flutter_test:
@@ -75,6 +79,7 @@ flutter:
 
   assets:
     - assets/imgs/
+    - assets/i18n/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

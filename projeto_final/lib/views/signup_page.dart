@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:projeto_final/theme/app_colors.dart';
 import 'package:projeto_final/theme/app_images.dart';
@@ -34,13 +33,10 @@ class _SignupPageState extends State<SignupPage> {
             imageQuality: 85,
           )
           .catchError((error) {
-            debugPrint("Image picker error: $error");
+            debugPrint(translate('signup.errors.image_picker'));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: const Text(
-                  "Failed to access gallery",
-                  style: TextStyle(fontFamily: "Lato"),
-                ),
+                content: Text(translate('signup.errors.gallery_access')),
                 backgroundColor: AppColors.red,
               ),
             );
@@ -53,13 +49,10 @@ class _SignupPageState extends State<SignupPage> {
         });
       }
     } catch (e) {
-      debugPrint("Unexpected error: $e");
+      debugPrint(translate('signup.errors.unexpected'));
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            "An unexpected error occurred",
-            style: TextStyle(fontFamily: "Lato"),
-          ),
+          content: Text(translate('signup.errors.unexpected_message')),
           backgroundColor: AppColors.red,
         ),
       );
@@ -69,12 +62,9 @@ class _SignupPageState extends State<SignupPage> {
   Future<void> register() async {
     if (_name.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Name is required',
-            style: TextStyle(fontFamily: "Lato"),
-          ),
-          backgroundColor: Colors.red,
+        SnackBar(
+          content: Text(translate('signup.errors.name_required')),
+          backgroundColor: AppColors.red,
         ),
       );
       return;
@@ -82,12 +72,9 @@ class _SignupPageState extends State<SignupPage> {
 
     if (_email.text.isEmpty || !_email.text.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Please enter a valid email',
-            style: TextStyle(fontFamily: "Lato"),
-          ),
-          backgroundColor: Colors.red,
+        SnackBar(
+          content: Text(translate('signup.errors.valid_email')),
+          backgroundColor: AppColors.red,
         ),
       );
       return;
@@ -95,12 +82,9 @@ class _SignupPageState extends State<SignupPage> {
 
     if (_password.text.isEmpty || _password.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Password must be at least 6 characters',
-            style: TextStyle(fontFamily: "Lato"),
-          ),
-          backgroundColor: Colors.red,
+        SnackBar(
+          content: Text(translate('signup.errors.password_length')),
+          backgroundColor: AppColors.red,
         ),
       );
       return;
@@ -109,20 +93,16 @@ class _SignupPageState extends State<SignupPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder:
-          (context) => const AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 20),
-                Text(
-                  'Creating account...',
-                  style: TextStyle(fontFamily: "Lato"),
-                ),
-              ],
-            ),
-          ),
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text(translate('signup.creating_account')),
+          ],
+        ),
+      ),
     );
 
     try {
@@ -142,10 +122,7 @@ class _SignupPageState extends State<SignupPage> {
         if (imageBytes.length > 500000) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: const Text(
-                'Image is too large, please select a smaller one',
-                style: TextStyle(fontFamily: "Lato"),
-              ),
+              content: Text(translate('signup.errors.image_too_large')),
               backgroundColor: AppColors.gray,
             ),
           );
@@ -165,28 +142,21 @@ class _SignupPageState extends State<SignupPage> {
 
       showDialog(
         context: context,
-        builder:
-            (context) => AlertDialog(
-              title: const Text(
-                'Registration Complete!',
-                style: TextStyle(fontFamily: "Lato"),
-              ),
-              content: const Text(
-                'Your account has been created successfully',
-                style: TextStyle(fontFamily: "Lato"),
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    if (FirebaseAuth.instance.currentUser != null) {
-                      Navigator.pushReplacementNamed(context, "/homePage");
-                    }
-                  },
-                  child: const Text('OK'),
-                ),
-              ],
+        builder: (context) => AlertDialog(
+          title: Text(translate('signup.success.title')),
+          content: Text(translate('signup.success.message')),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (FirebaseAuth.instance.currentUser != null) {
+                  Navigator.pushReplacementNamed(context, "/homePage");
+                }
+              },
+              child: Text(translate('signup.success.ok_button')),
             ),
+          ],
+        ),
       );
     } on FirebaseAuthException catch (e) {
       Navigator.of(context, rootNavigator: true).pop();
@@ -194,16 +164,16 @@ class _SignupPageState extends State<SignupPage> {
       String errorMessage;
       switch (e.code) {
         case 'weak-password':
-          errorMessage = 'The password is too weak';
+          errorMessage = translate('signup.errors.weak_password');
           break;
         case 'email-already-in-use':
-          errorMessage = 'Email already in use';
+          errorMessage = translate('signup.errors.email_in_use');
           break;
         case 'invalid-email':
-          errorMessage = 'Invalid email format';
+          errorMessage = translate('signup.errors.invalid_email');
           break;
         default:
-          errorMessage = 'Registration failed: ${e.message}';
+          errorMessage = '${translate('signup.errors.registration_failed')}: ${e.message}';
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -213,7 +183,7 @@ class _SignupPageState extends State<SignupPage> {
       Navigator.of(context, rootNavigator: true).pop();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('An error occurred: $e'),
+          content: Text('${translate('signup.errors.generic')}: $e'),
           backgroundColor: AppColors.red,
         ),
       );
@@ -240,8 +210,7 @@ class _SignupPageState extends State<SignupPage> {
                 child: IntrinsicHeight(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment:
-                        MainAxisAlignment.start, 
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
                       Image.asset(
@@ -254,20 +223,18 @@ class _SignupPageState extends State<SignupPage> {
                         onTap: _pickImage,
                         child: CircleAvatar(
                           radius: 50,
-                          backgroundImage:
-                              _selectedImage != null
-                                  ? MemoryImage(
-                                    base64Decode(
-                                      base64Encode(
-                                        _selectedImage!.readAsBytesSync(),
-                                      ),
+                          backgroundImage: _selectedImage != null
+                              ? MemoryImage(
+                                  base64Decode(
+                                    base64Encode(
+                                      _selectedImage!.readAsBytesSync(),
                                     ),
-                                  )
-                                  : null,
-                          child:
-                              _selectedImage == null
-                                  ? const Icon(Icons.add_a_photo, size: 30)
-                                  : null,
+                                  ),
+                                )
+                              : null,
+                          child: _selectedImage == null
+                              ? const Icon(Icons.add_a_photo, size: 30)
+                              : null,
                         ),
                       ),
                       Padding(
@@ -280,7 +247,7 @@ class _SignupPageState extends State<SignupPage> {
                                 controller: _name,
                                 style: TextStyle(color: AppColors.white),
                                 decoration: InputDecoration(
-                                  labelText: "Name",
+                                  labelText: translate('signup.name_label'),
                                   labelStyle: TextStyle(color: AppColors.white),
                                   prefixIcon: Icon(
                                     Icons.person,
@@ -293,7 +260,7 @@ class _SignupPageState extends State<SignupPage> {
                                 controller: _email,
                                 style: TextStyle(color: AppColors.white),
                                 decoration: InputDecoration(
-                                  labelText: "E-mail",
+                                  labelText: translate('signup.email_label'),
                                   labelStyle: TextStyle(color: AppColors.white),
                                   prefixIcon: Icon(
                                     Icons.email,
@@ -307,7 +274,7 @@ class _SignupPageState extends State<SignupPage> {
                                 obscureText: _obscure,
                                 style: TextStyle(color: AppColors.white),
                                 decoration: InputDecoration(
-                                  labelText: "Password",
+                                  labelText: translate('signup.password_label'),
                                   labelStyle: TextStyle(color: AppColors.white),
                                   prefixIcon: Icon(
                                     Icons.lock,
@@ -332,15 +299,14 @@ class _SignupPageState extends State<SignupPage> {
                                   ElevatedButton(
                                     onPressed: register,
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          AppColors.primaryColorLight,
+                                      backgroundColor: AppColors.primaryColorLight,
                                       padding: const EdgeInsets.symmetric(
                                         vertical: 15,
                                       ),
                                       minimumSize: const Size(175, 50),
                                     ),
                                     child: Text(
-                                      "Sign Up",
+                                      translate('signup.signup_button'),
                                       style: TextStyle(
                                         fontSize: 18,
                                         color: AppColors.white,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:projeto_final/components/appbar_component.dart';
 import 'package:projeto_final/components/detailed_character_card_component.dart';
 import 'package:projeto_final/controllers/character_controller.dart';
@@ -62,7 +63,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 } else if (favSnapshot.hasError) {
                   return Center(
                     child: Text(
-                      'Erro ao verificar favorito',
+                      translate('Error checking favorite'),
                       style: TextStyle(color: textColor),
                     ),
                   );
@@ -90,7 +91,7 @@ class _DetailsPageState extends State<DetailsPage> {
           } else if (snapshot.hasError) {
             return Center(
               child: Text(
-                "Ocorreu um erro.",
+                translate("An error occurred."),
                 style: TextStyle(color: textColor),
               ),
             );

@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:projeto_final/theme/app_colors.dart';
@@ -34,64 +34,64 @@ class _LoginPageState extends State<LoginPage> {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        throw Exception('Usuário não encontrado.');
+        throw Exception(translate('login.errors.user_not_found'));
       } else if (e.code == 'wrong-password') {
-        throw Exception('Senha incorreta.');
+        throw Exception(translate('login.errors.wrong_password'));
       } else {
-        throw Exception('Erro ao fazer login: ${e.message}');
+        throw Exception('${translate('login.errors.generic')}: ${e.message}');
       }
     }
   }
 
   Future<UserCredential?> signInWithGoogle(BuildContext context) async {
-  try {
-    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) return null;
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser == null) return null;
 
-    final GoogleSignInAuthentication googleAuth = 
-        await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = 
+          await googleUser.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
 
-    final UserCredential userCredential = 
-        await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential = 
+          await FirebaseAuth.instance.signInWithCredential(credential);
 
-    final user = userCredential.user;
-    if (user != null) {
-      String? photoBase64;
-      if (user.photoURL != null) {
-        try {
-          final response = await http.get(Uri.parse(user.photoURL!));
-          if (response.statusCode == 200) {
-            photoBase64 = base64Encode(response.bodyBytes);
+      final user = userCredential.user;
+      if (user != null) {
+        String? photoBase64;
+        if (user.photoURL != null) {
+          try {
+            final response = await http.get(Uri.parse(user.photoURL!));
+            if (response.statusCode == 200) {
+              photoBase64 = base64Encode(response.bodyBytes);
+            }
+          } catch (e) {
+            print(translate('login.errors.photo_conversion'));
           }
-        } catch (e) {
-          print("Erro ao converter foto: $e");
         }
+
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .set({
+              'nome': user.displayName ?? '',
+              'email': user.email ?? '',
+              'photoBase64': photoBase64 ?? '', 
+              'createdAt': DateTime.now(),
+            });
+
+        Navigator.pushReplacementNamed(context, "/homePage");
       }
 
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .set({
-            'nome': user.displayName ?? '',
-            'email': user.email ?? '',
-            'photoBase64': photoBase64 ?? '', 
-            'createdAt': DateTime.now(),
-          });
-
-      Navigator.pushReplacementNamed(context, "/homePage");
+      return userCredential;
+    } catch (e) {
+      print("${translate('login.errors.google_signin')}: $e");
+      return null;
     }
-
-    return userCredential;
-  } catch (e) {
-    print("Erro no login com Google: $e");
-    return null;
   }
-}
 
   void _toggleObscure() {
     setState(() {
@@ -128,12 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               TextFormField(
                                 controller: _email,
-                                style: TextStyle(color:  AppColors.white),
+                                style: TextStyle(color: AppColors.white),
                                 decoration: InputDecoration(
-                                  labelText: "E-mail",
-                                  labelStyle: TextStyle(
-                                    color:  AppColors.white,
-                                  ),
+                                  labelText: translate('login.email_label'),
+                                  labelStyle: TextStyle(color: AppColors.white),
                                   prefixIcon: Icon(
                                     Icons.email,
                                     color: AppColors.primaryColorLight,
@@ -144,12 +142,10 @@ class _LoginPageState extends State<LoginPage> {
                               TextFormField(
                                 controller: _password,
                                 obscureText: _obscure,
-                                style: TextStyle(color:  AppColors.white),
+                                style: TextStyle(color: AppColors.white),
                                 decoration: InputDecoration(
-                                  labelText: "Password",
-                                  labelStyle: TextStyle(
-                                    color:  AppColors.white,
-                                  ),
+                                  labelText: translate('login.password_label'),
+                                  labelStyle: TextStyle(color: AppColors.white),
                                   prefixIcon: Icon(
                                     Icons.lock,
                                     color: AppColors.primaryColorLight,
@@ -172,38 +168,32 @@ class _LoginPageState extends State<LoginPage> {
                                   ElevatedButton(
                                     onPressed: signIn,
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          AppColors.primaryColorLight,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 15,
-                                      ),
+                                      backgroundColor: AppColors.primaryColorLight,
+                                      padding: const EdgeInsets.symmetric(vertical: 15),
                                       minimumSize: const Size(175, 50),
                                     ),
                                     child: Text(
-                                      "Login",
+                                      translate('login.login_button'),
                                       style: TextStyle(
                                         fontSize: 18,
-                                        color:  AppColors.white,
+                                        color: AppColors.white,
                                         fontFamily: "Lato"
                                       ),
                                     ),
                                   ),
                                   SizedBox(width: 10),
                                   ElevatedButton(
-                                    onPressed: (){Navigator.pushReplacementNamed(context, "/signupPage");},
+                                    onPressed: () => Navigator.pushReplacementNamed(context, "/signupPage"),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          AppColors.primaryColorLight,
-                                      padding: const EdgeInsets.symmetric(
-                                        vertical: 15,
-                                      ),
+                                      backgroundColor: AppColors.primaryColorLight,
+                                      padding: const EdgeInsets.symmetric(vertical: 15),
                                       minimumSize: const Size(175, 50),
                                     ),
                                     child: Text(
-                                      "Sign Up",
+                                      translate('login.signup_button'),
                                       style: TextStyle(
                                         fontSize: 18,
-                                        color:  AppColors.white,
+                                        color: AppColors.white,
                                         fontFamily: "Lato"
                                       ),
                                     ),
@@ -215,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
-                                    'Or through social media',
+                                    translate('login.social_divider'),
                                     style: TextStyle(
                                       fontSize: 15,
                                       color: AppColors.white,
@@ -234,9 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                                     children: <Widget>[
                                       SignInButton.mini(
                                         buttonType: ButtonType.google,
-                                        onPressed: () {
-                                          signInWithGoogle(context);
-                                        },
+                                        onPressed: () => signInWithGoogle(context),
                                       ),
                                     ],
                                   ),

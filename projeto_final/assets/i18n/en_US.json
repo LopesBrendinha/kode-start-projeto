@@ -1,0 +1,105 @@
+{
+    "RICK AND MORTY API": "RICK AND MORTY API",
+    "Last known location: ": "Last known location: ",
+    "Origin: ": "Origin: ",
+    "Gender: ": "Gender: ",
+    "First seen in: ": "First seen in: ",
+    "Unknown": "Unknown",
+    "No data available": "No data available",
+    "Menu": "Menu",
+    "Dark Theme": "Dark Theme",
+    "Light Theme": "Light Theme",
+    "Exit": "Exit",
+    "language": "Language",
+    "Error checking favorite": "Error checking favorite",
+    "An error occurred.": "An error occurred.",
+    "Search": "Search",
+    "We cant seem to find in this dimension": "We can t seem to find in this dimension",
+    "Advanced Filters": "Advanced Filters",
+    "Alive": "Alive",
+    "Dead": "Dead",
+    "Species": "Species",
+    "Type": "Type",
+    "Female": "Female",
+    "Male": "Male",
+    "Genderless": "Genderless",
+    "CLEAR": "CLEAR",
+    "APPLY ": "APPLY",
+    "select_hint": "Select {{hint}}",
+    "intro": {
+        "page1": {
+            "title": "Welcome to the Rick and Morty Universe",
+            "body": "Explore every corner of the multiverse and discover amazing info about your favorite characters."
+        },
+        "page2": {
+            "title": "Discover Characters and Episodes",
+            "body": "Search, filter, and learn fun facts about each character and episode from the show."
+        },
+        "page3": {
+            "title": "Save Your Favorites",
+            "body": "Keep your favorite characters and episodes handy to revisit anytime."
+        },
+        "page4": {
+            "title": "Get Ready for Epic Adventures",
+            "body": "Travel across dimensions and explore everything the official Rick and Morty API has to offer."
+        },
+        "skip": "Skip",
+        "done": "Get Started"
+    },
+    "login": {
+        "email_label": "E-mail",
+        "password_label": "Password",
+        "login_button": "Login",
+        "signup_button": "Sign Up",
+        "social_divider": "Or through social media",
+        "errors": {
+            "user_not_found": "User not found.",
+            "wrong_password": "Wrong password.",
+            "generic": "Login error",
+            "photo_conversion": "Error converting photo",
+            "google_signin": "Google sign-in error"
+        }
+    },
+    "profile": {
+        "no_name": "No name",
+        "favorites_title": "My Favorites",
+        "no_favorites": "No favorites added",
+        "favorite_characters": "Favorite Characters ({{count}})",
+        "errors": {
+            "load_user": "Error loading user data",
+            "load_favorites": "Error loading favorites",
+            "image_decode": "Error decoding image"
+        }
+    },
+  "signup": {
+    "name_label": "Name",
+    "email_label": "E-mail",
+    "password_label": "Password",
+    "signup_button": "Sign Up",
+    "creating_account": "Creating account...",
+    "success": {
+      "title": "Registration Complete!",
+      "message": "Your account has been created successfully",
+      "ok_button": "OK"
+    },
+    "errors": {
+      "name_required": "Name is required",
+      "valid_email": "Please enter a valid email",
+      "password_length": "Password must be at least 6 characters",
+      "weak_password": "The password is too weak",
+      "email_in_use": "Email already in use",
+      "invalid_email": "Invalid email format",
+      "registration_failed": "Registration failed",
+      "generic": "An error occurred",
+      "image_picker": "Image picker error",
+      "gallery_access": "Failed to access gallery",
+      "unexpected": "Unexpected error",
+      "unexpected_message": "An unexpected error occurred",
+      "image_too_large": "Image is too large, please select a smaller one"
+    }
+  },
+
+    "splash": {
+    "loading_message": "Adjusting planetary coordinates and\nGetting a pickle..."
+  }
+}
