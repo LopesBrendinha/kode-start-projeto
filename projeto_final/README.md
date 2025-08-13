@@ -101,7 +101,12 @@ Este repositório contém a solução do desafio técnico proposto pela Kobe App
 
 ![NavigationDrawer](../Imgs&Gifs/TelaPerfil1.gif)
 
+🚫 Prevenção de Erros e Boa Experiência para o Usuário
+Para garantir que o usuário tenha uma navegação tranquila e sem frustrações, o aplicativo foi desenvolvido com cuidado para evitar erros comuns e fornecer feedback claro em situações inesperadas. Durante as telas de introdução, o usuário pode avançar, voltar ou pular a qualquer momento sem risco de travamentos ou perdas de dados.
 
+Além disso, mensagens de erro amigáveis são exibidas caso algum problema ocorra, como falhas na conexão com a internet ou indisponibilidade dos dados, orientando o usuário sobre os próximos passos. A interface também apresenta indicadores visuais de carregamento e confirmações visuais para todas as ações, assegurando que o usuário saiba exatamente o que está acontecendo no app.
+
+![NavigationDrawer](../Imgs&Gifs/erro.png)
 ---
 
 ## 🧠 Decisões Técnicas e Justificativas
